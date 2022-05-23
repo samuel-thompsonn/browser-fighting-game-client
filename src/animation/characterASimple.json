@@ -1,0 +1,104 @@
+[
+  {
+    "id": "idle",
+    "numFrames": 60,
+    "filePath": "characterASpriteSheet.jpg",
+    "offset": {
+      "x": 0,
+      "y": 0
+    },
+    "frameSize": {
+      "width": 64,
+      "height": 64
+    },
+    "stride": 66,
+    "statesPerFrame": 15
+  },
+  {
+    "id": "idleRight",
+    "numFrames": 60,
+    "filePath": "characterASpriteSheet.jpg",
+    "offset": {
+      "x": 0,
+      "y": 396
+    },
+    "frameSize": {
+      "width": 64,
+      "height": 64
+    },
+    "stride": 66,
+    "statesPerFrame": 15
+  },
+  {
+    "id": "left",
+    "numFrames": 4,
+    "filePath": "characterASpriteSheet.jpg",
+    "offset": {
+      "x": 0,
+      "y": 66
+    },
+    "frameSize": {
+      "width": 64,
+      "height": 64
+    },
+    "stride": 66
+  },
+  {
+    "id": "right",
+    "numFrames": 4,
+    "filePath": "characterASpriteSheet.jpg",
+    "offset": {
+      "x": 0,
+      "y": 132
+    },
+    "frameSize": {
+      "width": 64,
+      "height": 64
+    },
+    "stride": 66
+  },
+  {
+    "id": "attackLeft",
+    "numFrames": 2,
+    "filePath": "characterASpriteSheet.jpg",
+    "offset": {
+      "x": 0,
+      "y": 198
+    },
+    "frameSize": {
+      "width": 64,
+      "height": 64
+    },
+    "stride": 66
+  },
+  {
+    "id": "attackRight",
+    "numFrames": 2,
+    "filePath": "characterASpriteSheet.jpg",
+    "offset": {
+      "x": 0,
+      "y": 330
+    },
+    "frameSize": {
+      "width": 64,
+      "height": 64
+    },
+    "stride": 66
+  },
+  {
+    "id": "knockback",
+    "numFrames": 30,
+    "statesPerFrame": 15,
+    "filePath": "characterASpriteSheet.jpg",
+    "offset": {
+      "x": 0,
+      "y": 264
+    },
+    "frameSize": {
+      "width": 64,
+      "height": 64
+    },
+    "stride": 66
+  }
+  
+]
