@@ -1,4 +1,4 @@
-import { ControlsEventHandler } from "./InterfaceUtils";
+import { ControlsEventHandler } from './InterfaceUtils';
 
 /**
  * Keeps track of which keys are currently being pressed, and generates
@@ -6,9 +6,8 @@ import { ControlsEventHandler } from "./InterfaceUtils";
  * key events when you hold down a key.
  */
 export default class ControlsHandler {
-
   keyMap: Map<string, boolean>;
-  
+
   controlsHandlers: Map<string, ControlsEventHandler>;
 
   constructor(...handlers:ControlsEventHandler[]) {
@@ -24,8 +23,8 @@ export default class ControlsHandler {
     if (testKeyValue === true) { return; }
     this.keyMap.set(key, true);
     const handler = this.controlsHandlers.get(key);
-    if (handler) {
-      handler.onPress && handler.onPress();
+    if (handler && handler.onPress) {
+      handler.onPress();
     }
   }
 
@@ -34,9 +33,8 @@ export default class ControlsHandler {
     if (testKeyValue === false) { return; }
     this.keyMap.set(key, false);
     const handler = this.controlsHandlers.get(key);
-    if (handler) {
-      handler.onRelease && handler.onRelease();
+    if (handler && handler.onRelease) {
+      handler.onRelease();
     }
   }
-
 }

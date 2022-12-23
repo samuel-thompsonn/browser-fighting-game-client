@@ -1,0 +1,33 @@
+/* .MuiListItemText-root {
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  border-bottom: 0px;
+  color: blue;
+  background-color: blue;
+} */
+
+/* .MuiListItem-root {
+  padding-bottom: 0px;
+  margin-bottom: 40px;
+  border-bottom: 0px;
+} */
+
+.MuiButtonBase-root.MuiListItemButton-root.MuiListItemButton-gutters.Mui-selected {
+  background-color: #FFAA0030;
+}
+
+.MuiListItem-root {
+  padding-left: 0px;
+}
+
+/* .MuiTouchRipple-root {
+  background-color: aqua;
+} */
+
+/* 
+.MuiListItemButton-root {
+  background-color: coral;
+  border-width: 16px;
+  border-style: solid;
+  border-color: aqua;
+} */

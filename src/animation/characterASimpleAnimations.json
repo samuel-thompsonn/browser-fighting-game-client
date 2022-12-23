@@ -1,0 +1,168 @@
+[
+  {
+    "id": "idleLeft",
+    "numFrames": 16,
+    "filePath": "ryu_sprite_sheet_flipped.png",
+    "offset": {
+      "x": 1490,
+      "y": 15
+    },
+    "frameSize": {
+      "width": 49,
+      "height": 86
+    },
+    "stride": -50,
+    "statesPerFrame": 4
+  },
+  {
+    "id": "idleRight",
+    "numFrames": 16,
+    "filePath": "ryu_sprite_sheet.png",
+    "offset": {
+      "x": 2,
+      "y": 16
+    },
+    "frameSize": {
+      "width": 49,
+      "height": 86
+    },
+    "stride": 50,
+    "statesPerFrame": 4
+  },
+  {
+    "id": "left",
+    "numFrames": 10,
+    "filePath": "ryu_sprite_sheet_flipped.png",
+    "offset": {
+      "x": 1290,
+      "y": 15
+    },
+    "frameSize": {
+      "width": 49,
+      "height": 86
+    },
+    "stride": -50,
+    "statesPerFrame": 2
+  },
+  {
+    "id": "right",
+    "numFrames": 10,
+    "filePath": "ryu_sprite_sheet.png",
+    "offset": {
+      "x": 203,
+      "y": 15
+    },
+    "frameSize": {
+      "width": 47,
+      "height": 84
+    },
+    "stride": 50,
+    "statesPerFrame": 2
+  },
+  {
+    "id": "attackLeftStartup",
+    "numFrames": 2,
+    "filePath": "ryu_sprite_sheet_flipped.png",
+    "offset": {
+      "x": 1492,
+      "y": 131
+    },
+    "frameSize": {
+      "width": 49,
+      "height": 86
+    },
+    "stride": 0,
+    "statesPerFrame": 2
+  },
+  {
+    "id": "attackLeft",
+    "numFrames": 2,
+    "filePath": "ryu_sprite_sheet_flipped.png",
+    "offset": {
+      "x": 1430,
+      "y": 133
+    },
+    "frameSize": {
+      "width": 61,
+      "height": 84
+    },
+    "stride": 0,
+    "statesPerFrame": 2
+  },
+  {
+    "id": "attackLeftEndLag",
+    "numFrames": 2,
+    "filePath": "ryu_sprite_sheet_flipped.png",
+    "offset": {
+      "x": 1378,
+      "y": 133
+    },
+    "frameSize": {
+      "width": 49,
+      "height": 84
+    },
+    "stride": 0,
+    "statesPerFrame": 2
+  },
+  {
+    "id": "attackRightStartup",
+    "numFrames": 2,
+    "filePath": "ryu_sprite_sheet.png",
+    "offset": {
+      "x": 0,
+      "y": 133
+    },
+    "frameSize": {
+      "width": 49,
+      "height": 84
+    },
+    "stride": 0,
+    "statesPerFrame": 4
+  },
+  {
+    "id": "attackRight",
+    "numFrames": 2,
+    "filePath": "ryu_sprite_sheet.png",
+    "offset": {
+      "x": 49,
+      "y": 133
+    },
+    "frameSize": {
+      "width": 61,
+      "height": 84
+    },
+    "stride": 0,
+    "statesPerFrame": 4
+  },
+  {
+    "id": "attackRightEndLag",
+    "numFrames": 2,
+    "filePath": "ryu_sprite_sheet.png",
+    "offset": {
+      "x": 115,
+      "y": 133
+    },
+    "frameSize": {
+      "width": 49,
+      "height": 84
+    },
+    "stride": 0,
+    "statesPerFrame": 4
+  },
+  {
+    "id": "knockback",
+    "numFrames": 30,
+    "statesPerFrame": 15,
+    "filePath": "characterASpriteSheet.jpg",
+    "offset": {
+      "x": 0,
+      "y": 264
+    },
+    "frameSize": {
+      "width": 64,
+      "height": 64
+    },
+    "stride": 66
+  }
+  
+]

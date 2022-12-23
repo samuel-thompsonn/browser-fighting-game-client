@@ -1,0 +1,38 @@
+.Interactions-Box {
+  height: 60%;
+  background-color: green;
+  display: flex;
+  flex-direction: column;
+}
+
+.Title-Box {
+  padding: 2%;
+  background-color: #404040; 
+}
+
+h2 {
+  color: #AAAAAA;
+}
+
+.Interactions-List {
+  background-color: #333340;
+  color: #AAAAAA;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 30%;
+}
+
+p {
+  color: #CCCCCC;
+}
+
+.Interactions-Editor {
+  background-color: blue;
+  display: flex;
+  flex-direction: row;
+}
+
+.Condition-Effect-Editors {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "conditionType": "collision",
+    "conditionDescription": "True while a specific type of collision entity from another character is colliding with a specific type of collision entity belonging to this character.",
+    "args": [
+      {
+        "argName": "selfEntity",
+        "argDescription": "When one of my instances of"
+      },
+      {
+        "argName": "foreignEntity",
+        "argDescription": "Collides with any other character's instances of "
+      }
+    ]
+  },
+  {
+    "conditionType": "input",
+    "conditionDescription": "Description for INPUT condition type",
+    "args": [
+      {
+        "argName": "input name",
+        "argDescription": "name of input type triggering this effect"
+      }
+    ]
+  }
+]

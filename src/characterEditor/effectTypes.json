@@ -1,0 +1,30 @@
+[
+  {
+    "effectType": "setNextState",
+    "effectDescription": "Set the state which will come next after the current one, either with interruption or after the end of the current state",
+    "args": [
+      {
+        "argName": "resolutionType",
+        "argDescription": "Whether to interrupt the current state or wait until the current state ends to switch states.",
+        "argOptions": [
+          "afterEnd",
+          "interrupt"
+        ]
+      },
+      {
+        "argName": "destination",
+        "argDescription": "The state to which to transition."
+      }
+    ]
+  },
+  {
+    "effectType": "knockback",
+    "effectDescription": "Move next frame.",
+    "args": [
+      {
+        "argName": "knockback",
+        "argDescription": "The distance to be knocked back."
+      }
+    ]
+  }
+]

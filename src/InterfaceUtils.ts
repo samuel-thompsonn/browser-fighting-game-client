@@ -1,3 +1,22 @@
+export interface CollisionProperty {
+  propertyName: string;
+  valueType?: string;
+  propertyValue: string;
+}
+
+export interface CollisionRectangle {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface CollisionDataItem {
+  entityType: string;
+  properties?: CollisionProperty[];
+  rectangles: CollisionRectangle[];
+}
+
 export interface AnimationState {
   id: string;
   image: HTMLImageElement;
@@ -10,7 +29,7 @@ export interface AnimationState {
     height: number;
   }
   collisionData?: CollisionDataItem[];
-};
+}
 
 export interface AnimationDescription {
   id: string;
@@ -28,24 +47,9 @@ export interface AnimationDescription {
   statesPerFrame?: number;
 }
 
-export interface CollisionRectangle {
+export interface Position {
   x: number;
   y: number;
-  width: number;
-  height: number;
-}
-
-
-export interface CollisionProperty {
-  propertyName: string;
-  valueType?: string;
-  propertyValue: string;
-}
-
-export interface CollisionDataItem {
-  entityType: string;
-  properties?: CollisionProperty[];
-  rectangles: CollisionRectangle[];
 }
 
 export interface CharacterUpdate {
@@ -58,11 +62,6 @@ export interface CharacterUpdate {
   };
   collisionInfo: CollisionDataItem[];
 }
-
-export interface Position {
-  x: number;
-  y: number;
-};
 
 export interface ControlsEventHandler {
   key: string;
