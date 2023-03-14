@@ -13,7 +13,11 @@ function App() {
   );
 
   function initSocket() {
-    return io();
+    const apiURL = process.env.REACT_APP_API_URL;
+    if (apiURL) {
+      return io(apiURL);
+    }
+    throw new Error("Missing environmental variable REACT_APP_API_URL");
   }
 
   const socket = useRef<Socket>(initSocket());
