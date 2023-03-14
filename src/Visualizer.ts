@@ -5,6 +5,7 @@ import {
 import SimpleAnimationLoader from './SimpleAnimationLoader';
 
 const CHARACTER_SIZE = 64;
+const GROUND_LEVEL = 115; // Ground level is 128 units (not necessarily pixels?) down from top of canvas
 
 function setCanvasFillStyle(canvas: CanvasRenderingContext2D, color: string) {
   // eslint-disable-next-line no-param-reassign
@@ -40,8 +41,15 @@ function drawCollisionRectangle(
   setCanvasAlpha(canvas, 1.0);
 }
 
-class Visualizer {
-  currentState: AnimationState|undefined;
+function worldSpaceToCanvasSpace(worldPosition: Position): Position {
+  return {
+    x: worldPosition.x,
+    y: worldPosition.y + GROUND_LEVEL - CHARACTER_SIZE,
+  };
+}
+
+  class Visualizer {
+  currentState: AnimationState | undefined;
 
   animationStates: Map<string, AnimationState>;
 
@@ -55,7 +63,7 @@ class Visualizer {
     this.animationStates = new SimpleAnimationLoader().loadAnimations(animationData);
   }
 
-  setAnimationState(newState: string, collisionInfo: CollisionDataItem[]|undefined) {
+  setAnimationState(newState: string, collisionInfo: CollisionDataItem[] | undefined) {
     const nextState = this.animationStates.get(newState);
     if (nextState) {
       this.currentState = nextState;
@@ -71,16 +79,17 @@ class Visualizer {
 
   drawSelf(
     canvas: CanvasRenderingContext2D,
-  ):void {
-    if (!this.currentState) { return; }
+  ): void {
+    if(!this.currentState) { return; }
+    const canvasCoordinates = worldSpaceToCanvasSpace(this.currentPosition);
     canvas.drawImage(
       this.currentState.image,
       this.currentState.imageOffset.x,
       this.currentState.imageOffset.y,
       this.currentState.imageSize.width,
       this.currentState.imageSize.height,
-      this.currentPosition.x,
-      this.currentPosition.y,
+      canvasCoordinates.x,
+      canvasCoordinates.y,
       this.currentState.imageSize.width,
       this.currentState.imageSize.height,
     );
@@ -92,8 +101,8 @@ class Visualizer {
         drawCollisionRectangle(
           canvas,
           {
-            x: this.currentPosition.x + (hitbox.x * CHARACTER_SIZE),
-            y: this.currentPosition.y + (hitbox.y * CHARACTER_SIZE),
+            x: canvasCoordinates.x + (hitbox.x * CHARACTER_SIZE),
+            y: canvasCoordinates.y + (hitbox.y * CHARACTER_SIZE),
             width: hitbox.width * CHARACTER_SIZE,
             height: hitbox.height * CHARACTER_SIZE,
           },

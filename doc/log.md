@@ -66,3 +66,21 @@ sus but if the character file in S3 complies with that then I guess it's fine.
   - My guess here is that it should be a number but we cast it to a string when
   we read it from S3 since that is a thing we can do. So I switched it back
   to being a number.
+
+## 3/13/2023
+
+Objective 1.0: Dark background. This should be doable with CSS.
+
+Objective 1.0 complete--I can control global background color by styling the body element.
+
+Objective 2.0: Give the characters a reasonable feet position. Should involve modifying code for drawing the characters on the canvas.
+
+Objective 2.0 complete! I made a function for transforming between character coordinates (which seem to be what the server sends to me) to canvas coordinates which should be drawn. This transform can get more complicated but it's encapsulated which is great.
+
+Next objective (for later): Character health--first, implement it in the front end by adding a visualizer that pretends to have good input from the backend. And the backend implementation can then go in, probably in the update messages every frame.
+
+## 3/14/2023
+
+Objective 1.0: Add healthbars on the client side.
+- Phase 1: Assume health is always at 50 percent. What should the healthbars look like? What is something very simple?
+- Phase 2: Link it up to health info coming from the backend. Requires backend implementation first.
