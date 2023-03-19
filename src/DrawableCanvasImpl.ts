@@ -86,7 +86,7 @@ class DrawableCanvasImpl implements DrawableCanvas {
         const canvasOutputCoords = this.worldSpaceToCanvasSpace({ x: outputX, y: outputY });
         const canvasImageDimensions = this.worldSpaceToCanvasSpaceScale(
             { x: outputWidth, y: outputHeight });
-        this.canvasContext.fillRect(
+        this.canvasContext.strokeRect(
             canvasOutputCoords.x,
             canvasOutputCoords.y,
             canvasImageDimensions.x,

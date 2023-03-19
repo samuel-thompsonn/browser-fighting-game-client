@@ -6,16 +6,24 @@ import DrawableCanvasImpl from './DrawableCanvasImpl';
 import HealthVisualizer from './HealthVisualizer';
 
 const BACKGROUND_POSITION = {
-  x: -70,
-  y: -65
-}
-const BACKGROUND_DIMENSIONS = {
-  width: 248.888888888,
-  height: 140
-}
+  x: -120,
+  y: -145
+};
 
-const SCREEN_ASPECT_RATIO = 14/9;
-const SCREEN_GAME_AREA = 120;
+const BACKGROUND_DIMENSIONS = {
+  width: 436,
+  height: 280
+};
+
+const VIEWPORT_DIMENSIONS = {
+  aspectRatio: 14/9,
+  gameWidth: 360
+};
+
+const VIEWPORT_OFFSET = {
+  x: -50,
+  y: -110
+};
 
 function drawBackground(
   backgroundImage: HTMLImageElement,
@@ -54,9 +62,9 @@ function Canvas({
     if (canvasContext === null) { return undefined; }
     const drawableCanvas = new DrawableCanvasImpl(
       canvasContext,
-      SCREEN_ASPECT_RATIO * SCREEN_GAME_AREA,
-      SCREEN_GAME_AREA,
-      { x: 0, y: -20}
+      VIEWPORT_DIMENSIONS.gameWidth,
+      VIEWPORT_DIMENSIONS.gameWidth / VIEWPORT_DIMENSIONS.aspectRatio,
+      VIEWPORT_OFFSET
     );
 
     let animationFrameId: number;
@@ -89,7 +97,7 @@ function Canvas({
       });
       // Mark (0, 0) so I can easily tell where the camera is positioned.
       canvas.setFillStyle("red");
-      canvas.fillRectangle(-10, -10, 20, 20);
+      canvas.fillRectangle(-5, -5, 10, 10);
     };
 
     const render = () => {

@@ -86,6 +86,10 @@
       "width": 61,
       "height": 84
     },
+    "fixedPoint": {
+      "x": 12,
+      "y": 0
+    },
     "stride": 0,
     "statesPerFrame": 2
   },

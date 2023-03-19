@@ -16,6 +16,7 @@ function generateAnimationState(
       y: animationDescription.offset.y,
     },
     imageSize: animationDescription.frameSize,
+    fixedPoint: animationDescription.fixedPoint,
   };
 }
 

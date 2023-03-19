@@ -6,12 +6,7 @@ import {
 import SimpleAnimationLoader from './SimpleAnimationLoader';
 
 const CHARACTER_SIZE = 64;
-const CHARACTER_DIMENSIONS = {
-  x: 32,
-  y: 64
-};
-// const GROUND_LEVEL = 84; // Ground level is 128 units (not necessarily pixels?) down from top of canvas
-const GROUND_LEVEL = 0; // Ground level is 128 units (not necessarily pixels?) down from top of canvas
+const SPRITE_PIXELS_PER_UNIT = 49/64;
 
 function drawCollisionRectangle(
   canvas: DrawableCanvas,
@@ -70,16 +65,23 @@ class CharacterVisualizer {
     canvas: DrawableCanvas,
   ): void {
     if(!this.currentState) { return; }
+    const worldWidth = this.currentState.imageSize.width / SPRITE_PIXELS_PER_UNIT;
+    const worldHeight = this.currentState.imageSize.height / SPRITE_PIXELS_PER_UNIT;
+    let worldSpriteOffset = { x: 0, y: 0 };
+    if (this.currentState.fixedPoint) {
+      worldSpriteOffset.x = this.currentState.fixedPoint.x / SPRITE_PIXELS_PER_UNIT;
+      worldSpriteOffset.y = this.currentState.fixedPoint.y / SPRITE_PIXELS_PER_UNIT;
+    }
     canvas.drawImage(
       this.currentState.image,
       this.currentState.imageOffset.x,
       this.currentState.imageOffset.y,
       this.currentState.imageSize.width,
       this.currentState.imageSize.height,
-      this.currentPosition.x,
-      this.currentPosition.y,
-      CHARACTER_DIMENSIONS.x,
-      CHARACTER_DIMENSIONS.y,
+      this.currentPosition.x - worldSpriteOffset.x,
+      this.currentPosition.y - worldSpriteOffset.y,
+      worldWidth,
+      worldHeight,
     );
     if (this.currentState.collisionData) {
       const drawHitbox = (

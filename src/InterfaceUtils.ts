@@ -1,3 +1,5 @@
+import Vector from "./Vector";
+
 export interface CollisionProperty {
   propertyName: string;
   valueType?: string;
@@ -27,7 +29,8 @@ export interface AnimationState {
   imageSize: {
     width: number;
     height: number;
-  }
+  };
+  fixedPoint?: Vector;
   collisionData?: CollisionDataItem[];
 }
 
@@ -38,11 +41,12 @@ export interface AnimationDescription {
   offset: {
     x: number;
     y: number;
-  }
+  };
   frameSize: {
     width: number;
     height: number;
-  }
+  };
+  fixedPoint?: Vector;
   stride: number;
   statesPerFrame?: number;
 }
