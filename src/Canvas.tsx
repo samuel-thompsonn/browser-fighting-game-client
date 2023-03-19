@@ -1,29 +1,48 @@
 import React, { useEffect, useRef } from 'react';
 import './Canvas.css';
-import Visualizer from './Visualizer';
+import CharacterVisualizer from './CharacterVisualizer';
+import DrawableCanvas from './DrawableCanvas';
+import DrawableCanvasImpl from './DrawableCanvasImpl';
+import HealthVisualizer from './HealthVisualizer';
+
+const BACKGROUND_POSITION = {
+  x: -70,
+  y: -65
+}
+const BACKGROUND_DIMENSIONS = {
+  width: 248.888888888,
+  height: 140
+}
+
+const SCREEN_ASPECT_RATIO = 14/9;
+const SCREEN_GAME_AREA = 120;
 
 function drawBackground(
-  background_image: HTMLImageElement,
-  canvasContext: CanvasRenderingContext2D,
-  canvasWidth: number,
-  canvasHeight: number,
+  backgroundImage: HTMLImageElement,
+  canvas: DrawableCanvas
 ) {
-  let xScale = canvasWidth / background_image.width;
-  let yScale = canvasHeight / background_image.height;
-  canvasContext.drawImage(
-    background_image,
+  canvas.drawImage(
+    backgroundImage,
     0,
     0,
-    xScale * background_image.width,
-    yScale * background_image.height
+    backgroundImage.width,
+    backgroundImage.height,
+    BACKGROUND_POSITION.x,
+    BACKGROUND_POSITION.y,
+    BACKGROUND_DIMENSIONS.width,
+    BACKGROUND_DIMENSIONS.height
   );
 }
 
 interface CanvasProps {
-  visualizers: Map<string, Visualizer>;
+  characterVisualizers: Map<string, CharacterVisualizer>;
+  healthVisualizers: Map<string, HealthVisualizer>;
 }
 
-function Canvas({ visualizers }:CanvasProps) {
+function Canvas({
+  characterVisualizers,
+  healthVisualizers,
+}:CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -33,6 +52,12 @@ function Canvas({ visualizers }:CanvasProps) {
     canvas.height = canvas.offsetHeight;
     const canvasContext = canvas.getContext('2d');
     if (canvasContext === null) { return undefined; }
+    const drawableCanvas = new DrawableCanvasImpl(
+      canvasContext,
+      SCREEN_ASPECT_RATIO * SCREEN_GAME_AREA,
+      SCREEN_GAME_AREA,
+      { x: 0, y: -20}
+    );
 
     let animationFrameId: number;
 
@@ -50,21 +75,25 @@ function Canvas({ visualizers }:CanvasProps) {
     };
 
     const draw = (
-      canvasContextInstance: CanvasRenderingContext2D,
+      canvas: DrawableCanvas,
     ) => {
       // eslint-disable-next-line no-param-reassign
-      canvasContextInstance!.fillStyle = '#000000';
-      const { width } = canvasContextInstance.canvas;
-      const { height } = canvasContextInstance.canvas;
-      canvasContextInstance.clearRect(0, 0, width, height);
-      drawBackground(backgroundImage, canvasContextInstance, width, height);
-      visualizers.forEach((visualizer) => {
-        visualizer.drawSelf(canvasContextInstance);
+      canvas.setFillStyle('#000000');
+      canvas.clear();
+      drawBackground(backgroundImage, canvas);
+      characterVisualizers.forEach((visualizer) => {
+        visualizer.drawSelf(canvas);
       });
+      healthVisualizers.forEach((visualizer) => {
+        // visualizer.drawSelf(canvas);
+      });
+      // Mark (0, 0) so I can easily tell where the camera is positioned.
+      canvas.setFillStyle("red");
+      canvas.fillRectangle(-10, -10, 20, 20);
     };
 
     const render = () => {
-      draw(canvasContext);
+      draw(drawableCanvas);
       animationFrameId = window.requestAnimationFrame(render);
     };
     render();

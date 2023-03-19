@@ -1,14 +1,19 @@
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 import Canvas from './Canvas';
-import Visualizer from './Visualizer';
+import CharacterVisualizer from './CharacterVisualizer';
 import { CharacterUpdate, ControlsEventHandler } from './InterfaceUtils';
 import ControlsHandler from './ControlsHandler';
 import controlsMap from './ControlsMap.json';
 import "./App.css";
+import HealthVisualizer from './HealthVisualizer';
 
 function App() {
-  const [visualizers] = useState<Map<string, Visualizer>>(
+  const [characterVisualizers] = useState<Map<string, CharacterVisualizer>>(
+    new Map(),
+  );
+
+  const [characterHealthbars] = useState<Map<string, HealthVisualizer>>(
     new Map(),
   );
 
@@ -49,17 +54,24 @@ function App() {
       newSocket.emit('createCharacter');
     });
     newSocket.on('updateCharacter', (update:CharacterUpdate) => {
-      let targetVisualizer = visualizers.get(update.id);
+      let targetVisualizer = characterVisualizers.get(update.id);
       if (!targetVisualizer) {
-        targetVisualizer = new Visualizer();
-        visualizers.set(update.id, targetVisualizer);
+        targetVisualizer = new CharacterVisualizer();
+        characterVisualizers.set(update.id, targetVisualizer);
       }
       targetVisualizer.setAnimationState(update.state, update.collisionInfo);
       targetVisualizer.setPosition(update.position);
+
+      let healthVisualizer = characterHealthbars.get(update.id);
+      if (!healthVisualizer) {
+        healthVisualizer = new HealthVisualizer();
+        characterHealthbars.set(update.id, healthVisualizer);
+      }
+      healthVisualizer.setHealth(update.healthInfo.health, update.healthInfo.maxHealth);
     });
 
     newSocket.on('removeCharacter', (removedCharacterIndex:string) => {
-      visualizers.delete(removedCharacterIndex);
+      characterVisualizers.delete(removedCharacterIndex);
     });
   };
 
@@ -83,7 +95,10 @@ function App() {
         <h1>Browser fighting game</h1>
       </div>
       <div className="Canvas-Container">
-        <Canvas visualizers={visualizers} />
+        <Canvas
+          characterVisualizers={characterVisualizers}
+          healthVisualizers={characterHealthbars}
+        />
       </div>
     </div>
   );

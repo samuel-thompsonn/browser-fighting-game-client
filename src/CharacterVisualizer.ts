@@ -1,54 +1,43 @@
 import animationData from './animation/characterASimpleAnimations.json';
+import DrawableCanvas from './DrawableCanvas';
 import {
   Position, AnimationState, CollisionRectangle, CollisionDataItem,
 } from './InterfaceUtils';
 import SimpleAnimationLoader from './SimpleAnimationLoader';
 
 const CHARACTER_SIZE = 64;
-const GROUND_LEVEL = 115; // Ground level is 128 units (not necessarily pixels?) down from top of canvas
-
-function setCanvasFillStyle(canvas: CanvasRenderingContext2D, color: string) {
-  // eslint-disable-next-line no-param-reassign
-  canvas.fillStyle = color;
-}
-
-function setCanvasAlpha(canvas: CanvasRenderingContext2D, alpha: number) {
-  // eslint-disable-next-line no-param-reassign
-  canvas.globalAlpha = alpha;
-}
+const CHARACTER_DIMENSIONS = {
+  x: 32,
+  y: 64
+};
+// const GROUND_LEVEL = 84; // Ground level is 128 units (not necessarily pixels?) down from top of canvas
+const GROUND_LEVEL = 0; // Ground level is 128 units (not necessarily pixels?) down from top of canvas
 
 function drawCollisionRectangle(
-  canvas: CanvasRenderingContext2D,
+  canvas: DrawableCanvas,
   rectangle: CollisionRectangle,
   color: string,
 ) {
-  setCanvasFillStyle(canvas, color);
-  setCanvasAlpha(canvas, 0.5);
-  canvas.strokeRect(
+  canvas.setFillStyle(color);
+  canvas.setAlpha(0.5);
+  canvas.strokeRectangle(
     rectangle.x,
     rectangle.y,
     rectangle.width,
     rectangle.height,
   );
-  setCanvasFillStyle(canvas, color);
-  setCanvasAlpha(canvas, 0.25);
-  canvas.fillRect(
+  canvas.setFillStyle(color);
+  canvas.setAlpha(0.25);
+  canvas.fillRectangle(
     rectangle.x,
     rectangle.y,
     rectangle.width,
     rectangle.height,
   );
-  setCanvasAlpha(canvas, 1.0);
+  canvas.setAlpha(1.0);
 }
 
-function worldSpaceToCanvasSpace(worldPosition: Position): Position {
-  return {
-    x: worldPosition.x,
-    y: worldPosition.y + GROUND_LEVEL - CHARACTER_SIZE,
-  };
-}
-
-  class Visualizer {
+class CharacterVisualizer {
   currentState: AnimationState | undefined;
 
   animationStates: Map<string, AnimationState>;
@@ -78,20 +67,19 @@ function worldSpaceToCanvasSpace(worldPosition: Position): Position {
   }
 
   drawSelf(
-    canvas: CanvasRenderingContext2D,
+    canvas: DrawableCanvas,
   ): void {
     if(!this.currentState) { return; }
-    const canvasCoordinates = worldSpaceToCanvasSpace(this.currentPosition);
     canvas.drawImage(
       this.currentState.image,
       this.currentState.imageOffset.x,
       this.currentState.imageOffset.y,
       this.currentState.imageSize.width,
       this.currentState.imageSize.height,
-      canvasCoordinates.x,
-      canvasCoordinates.y,
-      this.currentState.imageSize.width,
-      this.currentState.imageSize.height,
+      this.currentPosition.x,
+      this.currentPosition.y,
+      CHARACTER_DIMENSIONS.x,
+      CHARACTER_DIMENSIONS.y,
     );
     if (this.currentState.collisionData) {
       const drawHitbox = (
@@ -101,8 +89,8 @@ function worldSpaceToCanvasSpace(worldPosition: Position): Position {
         drawCollisionRectangle(
           canvas,
           {
-            x: canvasCoordinates.x + (hitbox.x * CHARACTER_SIZE),
-            y: canvasCoordinates.y + (hitbox.y * CHARACTER_SIZE),
+            x: this.currentPosition.x + (hitbox.x * CHARACTER_SIZE),
+            y: this.currentPosition.y + (hitbox.y * CHARACTER_SIZE),
             width: hitbox.width * CHARACTER_SIZE,
             height: hitbox.height * CHARACTER_SIZE,
           },
@@ -127,4 +115,4 @@ function worldSpaceToCanvasSpace(worldPosition: Position): Position {
   }
 }
 
-export default Visualizer;
+export default CharacterVisualizer;

@@ -3,24 +3,34 @@ body {
 }
 
 .App {
-  width: 500px;
-  height: 500px;
+  width: 1000px;
+  height: 600px;
   margin-left: auto;
   margin-right: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #144272;
+  padding: 10px;
 }
 
 .Header-Container {
-  width: 250px;
-  height: 250px;
+  display: flex;
+  width: 40%;
+  height: 10%;
   background-color: #205295;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
 }
 
 .Canvas-Container {
-  width: 100%;
-  height: 30%;
+  width: 80%;
+  height: 87%;
   background-color: #2C74B3;
+}
+
+canvas {
+  width: 98%;
+  aspect-ratio: 14/9;
 }

@@ -84,3 +84,6 @@ Next objective (for later): Character health--first, implement it in the front e
 Objective 1.0: Add healthbars on the client side.
 - Phase 1: Assume health is always at 50 percent. What should the healthbars look like? What is something very simple?
 - Phase 2: Link it up to health info coming from the backend. Requires backend implementation first.
+  - Actually, it looks like we already have health info coming in from the backend, so we can already calculate things!
+
+It might be nice to have a Canvas object that acts as an interface between React and non-react and is an intermediary between the visualizers (CharacterVisualizer, HealthVisualizer). That way I am basically constructing an interface that acts as a canvas a la 2JS or P5JS.
