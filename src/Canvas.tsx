@@ -6,12 +6,12 @@ import DrawableCanvasImpl from './DrawableCanvasImpl';
 import HealthVisualizer from './HealthVisualizer';
 
 const BACKGROUND_POSITION = {
-  x: -120,
+  x: -170,
   y: -145
 };
 
 const BACKGROUND_DIMENSIONS = {
-  width: 436,
+  width: 546,
   height: 280
 };
 
@@ -92,9 +92,9 @@ function Canvas({
       characterVisualizers.forEach((visualizer) => {
         visualizer.drawSelf(canvas);
       });
-      healthVisualizers.forEach((visualizer) => {
-        // visualizer.drawSelf(canvas);
-      });
+      // healthVisualizers.forEach((visualizer) => {
+      //   visualizer.drawSelf(canvas);
+      // });
       // Mark (0, 0) so I can easily tell where the camera is positioned.
       canvas.setFillStyle("red");
       canvas.fillRectangle(-5, -5, 10, 10);

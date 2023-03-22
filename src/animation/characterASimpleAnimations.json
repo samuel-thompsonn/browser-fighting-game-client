@@ -4,14 +4,14 @@
     "numFrames": 16,
     "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
-      "x": 1490,
-      "y": 15
+      "x": 1492,
+      "y": 16
     },
     "frameSize": {
-      "width": 49,
+      "width": 43,
       "height": 86
     },
-    "stride": -50,
+    "stride": -49,
     "statesPerFrame": 4
   },
   {
@@ -19,14 +19,14 @@
     "numFrames": 16,
     "filePath": "ryu_sprite_sheet.png",
     "offset": {
-      "x": 2,
+      "x": 6,
       "y": 16
     },
     "frameSize": {
-      "width": 49,
+      "width": 43,
       "height": 86
     },
-    "stride": 50,
+    "stride": 49,
     "statesPerFrame": 4
   },
   {
@@ -34,14 +34,14 @@
     "numFrames": 10,
     "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
-      "x": 1290,
-      "y": 15
+      "x": 1293,
+      "y": 16
     },
     "frameSize": {
-      "width": 49,
-      "height": 86
+      "width": 43,
+      "height": 84
     },
-    "stride": -50,
+    "stride": -47,
     "statesPerFrame": 2
   },
   {
@@ -49,14 +49,14 @@
     "numFrames": 10,
     "filePath": "ryu_sprite_sheet.png",
     "offset": {
-      "x": 203,
-      "y": 15
+      "x": 205,
+      "y": 16
     },
     "frameSize": {
-      "width": 47,
+      "width": 43,
       "height": 84
     },
-    "stride": 50,
+    "stride": 47,
     "statesPerFrame": 2
   },
   {
@@ -64,8 +64,8 @@
     "numFrames": 2,
     "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
-      "x": 1492,
-      "y": 131
+      "x": 1495,
+      "y": 132
     },
     "frameSize": {
       "width": 49,
@@ -79,15 +79,15 @@
     "numFrames": 2,
     "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
-      "x": 1430,
-      "y": 133
+      "x": 1432,
+      "y": 132
     },
     "frameSize": {
       "width": 61,
       "height": 84
     },
     "fixedPoint": {
-      "x": 12,
+      "x": 14,
       "y": 0
     },
     "stride": 0,
@@ -98,8 +98,8 @@
     "numFrames": 2,
     "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
-      "x": 1378,
-      "y": 133
+      "x": 1381,
+      "y": 132
     },
     "frameSize": {
       "width": 49,
@@ -113,8 +113,8 @@
     "numFrames": 2,
     "filePath": "ryu_sprite_sheet.png",
     "offset": {
-      "x": 0,
-      "y": 133
+      "x": 3,
+      "y": 132
     },
     "frameSize": {
       "width": 49,
@@ -128,8 +128,8 @@
     "numFrames": 2,
     "filePath": "ryu_sprite_sheet.png",
     "offset": {
-      "x": 49,
-      "y": 133
+      "x": 52,
+      "y": 132
     },
     "frameSize": {
       "width": 61,
@@ -143,11 +143,11 @@
     "numFrames": 2,
     "filePath": "ryu_sprite_sheet.png",
     "offset": {
-      "x": 115,
-      "y": 133
+      "x": 117,
+      "y": 132
     },
     "frameSize": {
-      "width": 49,
+      "width": 47,
       "height": 84
     },
     "stride": 0,
