@@ -1,4 +1,4 @@
-interface DrawableCanvas {
+interface DrawableGameCanvas {
 
     // Returns width in canvas space, not necessarily pixels
     getWidth(): number;
@@ -41,4 +41,4 @@ interface DrawableCanvas {
     ): void;
 }
 
-export default DrawableCanvas;
+export default DrawableGameCanvas;

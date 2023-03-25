@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import './Canvas.css';
 import CharacterVisualizer from './CharacterVisualizer';
-import DrawableCanvas from './DrawableCanvas';
-import DrawableCanvasImpl from './DrawableCanvasImpl';
+import DrawableGameCanvas from './DrawableGameCanvas';
+import DrawableGameCanvasImpl from './DrawableGameCanvasImpl';
 import HealthVisualizer from './HealthVisualizer';
 
 const BACKGROUND_POSITION = {
@@ -27,7 +27,7 @@ const VIEWPORT_OFFSET = {
 
 function drawBackground(
   backgroundImage: HTMLImageElement,
-  canvas: DrawableCanvas
+  canvas: DrawableGameCanvas
 ) {
   canvas.drawImage(
     backgroundImage,
@@ -60,11 +60,17 @@ function Canvas({
     canvas.height = canvas.offsetHeight;
     const canvasContext = canvas.getContext('2d');
     if (canvasContext === null) { return undefined; }
-    const drawableCanvas = new DrawableCanvasImpl(
+    const drawableCanvas = new DrawableGameCanvasImpl(
       canvasContext,
       VIEWPORT_DIMENSIONS.gameWidth,
       VIEWPORT_DIMENSIONS.gameWidth / VIEWPORT_DIMENSIONS.aspectRatio,
       VIEWPORT_OFFSET
+    );
+    const guiCanvas = new DrawableGameCanvasImpl(
+      canvasContext,
+      1,
+      1,
+      { x: 0, y : 0}
     );
 
     let animationFrameId: number;
@@ -83,25 +89,25 @@ function Canvas({
     };
 
     const draw = (
-      canvas: DrawableCanvas,
+      canvas: DrawableGameCanvas,
+      guiCanvas: DrawableGameCanvas
     ) => {
       // eslint-disable-next-line no-param-reassign
-      canvas.setFillStyle('#000000');
-      canvas.clear();
       drawBackground(backgroundImage, canvas);
       characterVisualizers.forEach((visualizer) => {
         visualizer.drawSelf(canvas);
       });
-      // healthVisualizers.forEach((visualizer) => {
-      //   visualizer.drawSelf(canvas);
-      // });
+      healthVisualizers.forEach((visualizer) => {
+        visualizer.drawSelf(guiCanvas);
+      });
       // Mark (0, 0) so I can easily tell where the camera is positioned.
       canvas.setFillStyle("red");
       canvas.fillRectangle(-5, -5, 10, 10);
     };
 
     const render = () => {
-      draw(drawableCanvas);
+      drawableCanvas.clear();
+      draw(drawableCanvas, guiCanvas);
       animationFrameId = window.requestAnimationFrame(render);
     };
     render();

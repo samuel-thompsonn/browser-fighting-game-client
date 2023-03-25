@@ -1,7 +1,7 @@
-import DrawableCanvas from "./DrawableCanvas";
+import DrawableGameCanvas from "./DrawableGameCanvas";
 import Vector from "./Vector";
 
-class DrawableCanvasImpl implements DrawableCanvas {
+class DrawableGameCanvasImpl implements DrawableGameCanvas {
 
     canvasContext: CanvasRenderingContext2D;
     widthUnits: number;
@@ -122,4 +122,4 @@ class DrawableCanvasImpl implements DrawableCanvas {
     }
 }
 
-export default DrawableCanvasImpl;
+export default DrawableGameCanvasImpl;

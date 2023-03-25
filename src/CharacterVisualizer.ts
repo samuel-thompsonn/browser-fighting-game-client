@@ -1,5 +1,5 @@
 import animationData from './animation/characterASimpleAnimations.json';
-import DrawableCanvas from './DrawableCanvas';
+import DrawableGameCanvas from './DrawableGameCanvas';
 import {
   Position, AnimationState, CollisionRectangle, CollisionDataItem,
 } from './InterfaceUtils';
@@ -9,7 +9,7 @@ const CHARACTER_SIZE = 64;
 const SPRITE_PIXELS_PER_UNIT = 49/64;
 
 function drawCollisionRectangle(
-  canvas: DrawableCanvas,
+  canvas: DrawableGameCanvas,
   rectangle: CollisionRectangle,
   color: string,
 ) {
@@ -62,7 +62,7 @@ class CharacterVisualizer {
   }
 
   drawSelf(
-    canvas: DrawableCanvas,
+    canvas: DrawableGameCanvas,
   ): void {
     if(!this.currentState) { return; }
     const worldWidth = this.currentState.imageSize.width / SPRITE_PIXELS_PER_UNIT;
