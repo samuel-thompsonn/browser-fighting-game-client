@@ -56,15 +56,17 @@ export interface Position {
   y: number;
 }
 
-export interface CharacterUpdate {
+export interface CharacterStatus {
   id: string;
   position: Position;
   state: string;
-  healthInfo: {
-    health: number;
-    maxHealth: number;
-  };
+  healthInfo: HealthInfo;
   collisionInfo: CollisionDataItem[];
+}
+
+export interface HealthInfo {
+  health: number;
+  maxHealth: number;
 }
 
 export interface ControlsEventHandler {

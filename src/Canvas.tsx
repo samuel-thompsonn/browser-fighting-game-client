@@ -4,6 +4,8 @@ import CharacterVisualizer from './CharacterVisualizer';
 import DrawableGameCanvas from './DrawableGameCanvas';
 import DrawableGameCanvasImpl from './DrawableGameCanvasImpl';
 import HealthVisualizer from './HealthVisualizer';
+import HealthVisualizerTray from './HealthVisualizerTray';
+import { CharacterStatus, HealthInfo } from './InterfaceUtils';
 
 const BACKGROUND_POSITION = {
   x: -170,
@@ -44,14 +46,15 @@ function drawBackground(
 
 interface CanvasProps {
   characterVisualizers: Map<string, CharacterVisualizer>;
-  healthVisualizers: Map<string, HealthVisualizer>;
+  characters: Map<string, CharacterStatus>
 }
 
 function Canvas({
   characterVisualizers,
-  healthVisualizers,
-}:CanvasProps) {
+  characters,
+}: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const healthVisualizerTray = new HealthVisualizerTray(); // Ideally should be injected.
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -97,9 +100,14 @@ function Canvas({
       characterVisualizers.forEach((visualizer) => {
         visualizer.drawSelf(canvas);
       });
-      healthVisualizers.forEach((visualizer) => {
-        visualizer.drawSelf(guiCanvas);
+
+      const characterHealths: Map<string, HealthInfo> = new Map();
+      characters.forEach((characterStatus, characterID) => {
+        characterHealths.set(characterID, characterStatus.healthInfo);
       });
+      
+      healthVisualizerTray.drawSelf(guiCanvas, characterHealths);
+
       // Mark (0, 0) so I can easily tell where the camera is positioned.
       canvas.setFillStyle("red");
       canvas.fillRectangle(-5, -5, 10, 10);

@@ -2,7 +2,7 @@ import { io, Socket } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 import Canvas from './Canvas';
 import CharacterVisualizer from './CharacterVisualizer';
-import { CharacterUpdate, ControlsEventHandler } from './InterfaceUtils';
+import { CharacterStatus, ControlsEventHandler } from './InterfaceUtils';
 import ControlsHandler from './ControlsHandler';
 import controlsMap from './ControlsMap.json';
 import "./App.css";
@@ -13,7 +13,7 @@ function App() {
     new Map(),
   );
 
-  const [characterHealthbars] = useState<Map<string, HealthVisualizer>>(
+  const [characterStates, setCharacterStates] = useState<Map<string, CharacterStatus>>(
     new Map(),
   );
 
@@ -53,7 +53,7 @@ function App() {
     newSocket.on('accepted_connection', () => {
       newSocket.emit('createCharacter');
     });
-    newSocket.on('updateCharacter', (update:CharacterUpdate) => {
+    newSocket.on('updateCharacter', (update:CharacterStatus) => {
       let targetVisualizer = characterVisualizers.get(update.id);
       if (!targetVisualizer) {
         targetVisualizer = new CharacterVisualizer();
@@ -62,16 +62,13 @@ function App() {
       targetVisualizer.setAnimationState(update.state, update.collisionInfo);
       targetVisualizer.setPosition(update.position);
 
-      let healthVisualizer = characterHealthbars.get(update.id);
-      if (!healthVisualizer) {
-        healthVisualizer = new HealthVisualizer();
-        characterHealthbars.set(update.id, healthVisualizer);
-      }
-      healthVisualizer.setHealth(update.healthInfo.health, update.healthInfo.maxHealth);
+      characterStates.set(update.id, update);
+      setCharacterStates(characterStates);
     });
 
     newSocket.on('removeCharacter', (removedCharacterIndex:string) => {
       characterVisualizers.delete(removedCharacterIndex);
+      characterStates.delete(removedCharacterIndex);
     });
   };
 
@@ -94,10 +91,11 @@ function App() {
       <div className="Header-Container">
         <h1>Browser fighting game</h1>
       </div>
+      {/* Canvas should really just take in two characters, or take JSON translations of their state */}
       <div className="Canvas-Container">
         <Canvas
           characterVisualizers={characterVisualizers}
-          healthVisualizers={characterHealthbars}
+          characters={characterStates}
         />
       </div>
     </div>

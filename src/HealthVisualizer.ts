@@ -5,7 +5,7 @@ function getHealthProportion(currentHealth: number, maxHealth: number): number {
     if (maxHealth === 0) {
         return 1;
     }
-    return currentHealth / maxHealth;
+    return Math.max(0, Math.min(currentHealth / maxHealth, 1));
 }
 
 class HealthVisualizer {
@@ -37,7 +37,12 @@ class HealthVisualizer {
             this.height
         );
         canvas.setFillStyle("green");
-        canvas.fillRectangle(this.margin, this.margin, healthProportion * this.width, this.height);
+        canvas.fillRectangle(
+            this.margin + offset.x,
+            this.margin + offset.y,
+            healthProportion * this.width,
+            this.height
+        );
     }
 
     setHealth(currentHealth: number, maxHealth: number): void {
