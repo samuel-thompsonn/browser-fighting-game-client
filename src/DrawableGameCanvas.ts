@@ -22,6 +22,15 @@ interface DrawableGameCanvas {
         outputHeight: number,
     ): void;
 
+    drawText(
+        text: string,
+        outputX: number,
+        outputY: number,
+        fontSize: number,
+        fillColor: string,
+        strokeColor?: string,
+    ): void;
+
     setFillStyle(color: string): void;
 
     setAlpha(alpha: number): void;

@@ -1,7 +1,7 @@
 import animationData from './animation/characterASimpleAnimations.json';
 import DrawableGameCanvas from './DrawableGameCanvas';
 import {
-  Position, AnimationState, CollisionRectangle, CollisionDataItem,
+  Position, AnimationState, CollisionRectangle, CollisionDataItem, CharacterStatus,
 } from './InterfaceUtils';
 import SimpleAnimationLoader from './SimpleAnimationLoader';
 
@@ -33,87 +33,90 @@ function drawCollisionRectangle(
 }
 
 class CharacterVisualizer {
-  currentState: AnimationState | undefined;
-
   animationStates: Map<string, AnimationState>;
 
-  currentPosition: Position;
-
   constructor() {
-    this.currentPosition = {
-      x: 0,
-      y: 0,
-    };
     this.animationStates = new SimpleAnimationLoader().loadAnimations(animationData);
   }
 
-  setAnimationState(newState: string, collisionInfo: CollisionDataItem[] | undefined) {
-    const nextState = this.animationStates.get(newState);
-    if (nextState) {
-      this.currentState = nextState;
-      this.currentState.collisionData = collisionInfo;
-    } else {
-      throw new Error(`Server referenced unknown animation state ${newState}`);
-    }
-  }
-
-  setPosition(newPosition: Position) {
-    this.currentPosition = newPosition;
-  }
-
-  drawSelf(
+  drawCharacter(
     canvas: DrawableGameCanvas,
+    characterStatus: CharacterStatus
   ): void {
-    if(!this.currentState) { return; }
-    const worldWidth = this.currentState.imageSize.width / SPRITE_PIXELS_PER_UNIT;
-    const worldHeight = this.currentState.imageSize.height / SPRITE_PIXELS_PER_UNIT;
-    let worldSpriteOffset = { x: 0, y: 0 };
-    if (this.currentState.fixedPoint) {
-      worldSpriteOffset.x = this.currentState.fixedPoint.x / SPRITE_PIXELS_PER_UNIT;
-      worldSpriteOffset.y = this.currentState.fixedPoint.y / SPRITE_PIXELS_PER_UNIT;
+    const animationState = this.animationStates.get(characterStatus.state);
+    if (!animationState) {
+      throw new Error(`Server referenced unknown animation state ${characterStatus.state}`)
     }
+    const worldWidth = animationState.imageSize.width / SPRITE_PIXELS_PER_UNIT;
+    const worldHeight = animationState.imageSize.height / SPRITE_PIXELS_PER_UNIT;
+    let worldSpriteOffset = { x: 0, y: 0 };
+    if (animationState.fixedPoint) {
+      worldSpriteOffset.x = animationState.fixedPoint.x / SPRITE_PIXELS_PER_UNIT;
+      worldSpriteOffset.y = animationState.fixedPoint.y / SPRITE_PIXELS_PER_UNIT;
+    }
+
+    canvas.drawText(
+      `ID: ${characterStatus.id}`,
+      characterStatus.position.x,
+      characterStatus.position.y - 10,
+      48,
+      "#2C74B3",
+      "#000000"
+    );
     canvas.drawImage(
-      this.currentState.image,
-      this.currentState.imageOffset.x,
-      this.currentState.imageOffset.y,
-      this.currentState.imageSize.width,
-      this.currentState.imageSize.height,
-      this.currentPosition.x - worldSpriteOffset.x,
-      this.currentPosition.y - worldSpriteOffset.y,
+      animationState.image,
+      animationState.imageOffset.x,
+      animationState.imageOffset.y,
+      animationState.imageSize.width,
+      animationState.imageSize.height,
+      characterStatus.position.x - worldSpriteOffset.x,
+      characterStatus.position.y - worldSpriteOffset.y,
       worldWidth,
       worldHeight,
     );
-    if (this.currentState.collisionData) {
-      const drawHitbox = (
-        color: string,
-        hitbox: CollisionRectangle,
-      ) => {
-        drawCollisionRectangle(
-          canvas,
-          {
-            x: this.currentPosition.x + (hitbox.x * CHARACTER_SIZE),
-            y: this.currentPosition.y + (hitbox.y * CHARACTER_SIZE),
-            width: hitbox.width * CHARACTER_SIZE,
-            height: hitbox.height * CHARACTER_SIZE,
-          },
-          color,
-        );
-      };
+
+    console.log(`animationState: ${animationState}`);
+    if (characterStatus.collisionInfo) {
+      console.log("Drawing collision data!");
       const defaultColor = '#AAAAAA';
       const entityTypeColors = new Map([
         ['hurtbox', '#00FF55'],
         ['hitbox', '#AA0000'],
       ]);
-      this.currentState.collisionData?.forEach((collisionDataItem) => {
+      characterStatus.collisionInfo?.forEach((collisionDataItem) => {
         collisionDataItem.rectangles.forEach((collisionRectangle) => {
           let boxColor = entityTypeColors.get(collisionDataItem.entityType);
           if (!boxColor) {
             boxColor = defaultColor;
           }
-          drawHitbox(boxColor, collisionRectangle);
+          this.drawHitbox(
+            canvas,
+            boxColor,
+            collisionRectangle,
+            characterStatus.position
+          );
         });
       });
     }
+  }
+
+  drawHitbox(
+    canvas: DrawableGameCanvas,
+    color: string,
+    hitbox: CollisionRectangle,
+    characterPosition: Position
+  ):void {
+    console.log("Drawing collision rectangle!");
+    drawCollisionRectangle(
+      canvas,
+      {
+        x: characterPosition.x + (hitbox.x * CHARACTER_SIZE),
+        y: characterPosition.y + (hitbox.y * CHARACTER_SIZE),
+        width: hitbox.width * CHARACTER_SIZE,
+        height: hitbox.height * CHARACTER_SIZE,
+      },
+      color,
+    );
   }
 }
 

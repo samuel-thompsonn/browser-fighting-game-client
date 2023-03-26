@@ -54,14 +54,6 @@ function App() {
       newSocket.emit('createCharacter');
     });
     newSocket.on('updateCharacter', (update:CharacterStatus) => {
-      let targetVisualizer = characterVisualizers.get(update.id);
-      if (!targetVisualizer) {
-        targetVisualizer = new CharacterVisualizer();
-        characterVisualizers.set(update.id, targetVisualizer);
-      }
-      targetVisualizer.setAnimationState(update.state, update.collisionInfo);
-      targetVisualizer.setPosition(update.position);
-
       characterStates.set(update.id, update);
       setCharacterStates(characterStates);
     });
@@ -94,7 +86,6 @@ function App() {
       {/* Canvas should really just take in two characters, or take JSON translations of their state */}
       <div className="Canvas-Container">
         <Canvas
-          characterVisualizers={characterVisualizers}
           characters={characterStates}
         />
       </div>

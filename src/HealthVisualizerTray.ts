@@ -14,12 +14,6 @@ class HealthVisualizerTray {
         this.healthVisualizers.push(healthVisualizer);
     }
 
-    // drawSelf(guiCanvas: DrawableGameCanvas): void {
-    //     this.healthVisualizers.forEach(
-    //         (healthVisualizer) => healthVisualizer.drawSelf(guiCanvas)
-    //     );
-    // }
-
     drawSelf(
         guiCanvas: DrawableGameCanvas,
         characterHealths: Map<string, HealthInfo>
@@ -32,7 +26,7 @@ class HealthVisualizerTray {
                 return;
             }
             healthVisualizer.setHealth(healthInfo.health, healthInfo.maxHealth);
-            healthVisualizer.drawSelf(guiCanvas, { x: 0 + (index * 0.30), y: 0 });
+            healthVisualizer.drawSelf(guiCanvas, { x: 0 + (index * 0.30), y: 0 }, key);
         });
     }
 }

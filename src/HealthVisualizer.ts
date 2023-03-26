@@ -26,7 +26,8 @@ class HealthVisualizer {
     
     drawSelf(
         canvas: DrawableGameCanvas,
-        offset: Vector = { x: 0, y: 0 }
+        offset: Vector = { x: 0, y: 0 },
+        characterID: string,
     ): void {
         const healthProportion = getHealthProportion(this.currentHealth, this.maxHealth);
         canvas.setFillStyle("red");
@@ -42,6 +43,14 @@ class HealthVisualizer {
             this.margin + offset.y,
             healthProportion * this.width,
             this.height
+        );
+        canvas.drawText(
+            `ID: ${characterID}`,
+            this.margin + offset.x,
+            this.margin + offset.y + (this.height * 0.90),
+            48,
+            "#2C74B3",
+            "#000000"
         );
     }
 

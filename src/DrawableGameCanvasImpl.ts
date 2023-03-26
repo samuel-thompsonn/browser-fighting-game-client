@@ -20,6 +20,24 @@ class DrawableGameCanvasImpl implements DrawableGameCanvas {
         this.position = position;
     }
 
+    drawText(
+        text: string,
+        outputX: number,
+        outputY: number,
+        fontSize: number,
+        fillColor: string,
+        strokeColor?: string,
+    ): void {
+        const canvasOutputCoords = this.worldSpaceToCanvasSpace({ x: outputX, y: outputY });
+        this.canvasContext.font = `${fontSize}px calibri`
+        this.canvasContext.fillStyle = fillColor;
+        this.canvasContext.fillText(text, canvasOutputCoords.x, canvasOutputCoords.y);
+        if (strokeColor) {
+            this.canvasContext.strokeStyle = strokeColor;
+            this.canvasContext.strokeText(text, canvasOutputCoords.x, canvasOutputCoords.y);
+        }
+    }
+
     getWidth(): number {
         return this.widthUnits;
     }

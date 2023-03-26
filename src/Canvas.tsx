@@ -45,12 +45,12 @@ function drawBackground(
 }
 
 interface CanvasProps {
-  characterVisualizers: Map<string, CharacterVisualizer>;
+  characterVisualizer?: CharacterVisualizer;
   characters: Map<string, CharacterStatus>
 }
 
 function Canvas({
-  characterVisualizers,
+  characterVisualizer = new CharacterVisualizer(),
   characters,
 }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -97,8 +97,9 @@ function Canvas({
     ) => {
       // eslint-disable-next-line no-param-reassign
       drawBackground(backgroundImage, canvas);
-      characterVisualizers.forEach((visualizer) => {
-        visualizer.drawSelf(canvas);
+
+      characters.forEach((characterStatus) => {
+        characterVisualizer.drawCharacter(canvas, characterStatus);
       });
 
       const characterHealths: Map<string, HealthInfo> = new Map();
