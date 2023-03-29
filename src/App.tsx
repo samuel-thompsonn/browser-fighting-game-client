@@ -6,12 +6,9 @@ import { CharacterStatus, ControlsEventHandler } from './InterfaceUtils';
 import ControlsHandler from './ControlsHandler';
 import controlsMap from './ControlsMap.json';
 import "./App.css";
-import HealthVisualizer from './HealthVisualizer';
+import GameEndInfo from './datatype/GameEndInfo';
 
 function App() {
-  const [characterVisualizers] = useState<Map<string, CharacterVisualizer>>(
-    new Map(),
-  );
 
   const [characterStates, setCharacterStates] = useState<Map<string, CharacterStatus>>(
     new Map(),
@@ -57,10 +54,12 @@ function App() {
       characterStates.set(update.id, update);
       setCharacterStates(characterStates);
     });
-
     newSocket.on('removeCharacter', (removedCharacterIndex:string) => {
-      characterVisualizers.delete(removedCharacterIndex);
       characterStates.delete(removedCharacterIndex);
+    });
+    newSocket.on('gameComplete', ({ winnerID }:GameEndInfo) => {
+      console.log(`Player with ID ${winnerID} has won!`);
+
     });
   };
 

@@ -75,9 +75,7 @@ class CharacterVisualizer {
       worldHeight,
     );
 
-    console.log(`animationState: ${animationState}`);
     if (characterStatus.collisionInfo) {
-      console.log("Drawing collision data!");
       const defaultColor = '#AAAAAA';
       const entityTypeColors = new Map([
         ['hurtbox', '#00FF55'],
@@ -106,7 +104,6 @@ class CharacterVisualizer {
     hitbox: CollisionRectangle,
     characterPosition: Position
   ):void {
-    console.log("Drawing collision rectangle!");
     drawCollisionRectangle(
       canvas,
       {
