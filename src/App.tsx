@@ -10,7 +10,7 @@ import GameEndInfo from './datatype/GameEndInfo';
 
 function App() {
 
-  const [characterStates, setCharacterStates] = useState<Map<string, CharacterStatus>>(
+  const [characterStates] = useState<Map<string, CharacterStatus>>(
     new Map(),
   );
 
@@ -52,7 +52,6 @@ function App() {
     });
     newSocket.on('updateCharacter', (update:CharacterStatus) => {
       characterStates.set(update.id, update);
-      setCharacterStates(characterStates);
     });
     newSocket.on('removeCharacter', (removedCharacterIndex:string) => {
       characterStates.delete(removedCharacterIndex);
