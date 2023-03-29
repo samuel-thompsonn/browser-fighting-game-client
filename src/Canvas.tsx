@@ -45,13 +45,15 @@ function drawBackground(
 }
 
 interface CanvasProps {
-  characterVisualizer?: CharacterVisualizer;
-  characters: Map<string, CharacterStatus>
+  characterVisualizer?:CharacterVisualizer;
+  characters:Map<string, CharacterStatus>;
+  gameWinner:string|undefined;
 }
 
 function Canvas({
   characterVisualizer = new CharacterVisualizer(),
   characters,
+  gameWinner,
 }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const healthVisualizerTray = new HealthVisualizerTray(); // Ideally should be injected.
@@ -112,6 +114,9 @@ function Canvas({
       // Mark (0, 0) so I can easily tell where the camera is positioned.
       canvas.setFillStyle("red");
       canvas.fillRectangle(-5, -5, 10, 10);
+      if (gameWinner) {
+        guiCanvas.drawText(`Player ${gameWinner} wins!`, 0.15, 0.5, 100, 'red', 'black');
+      }
     };
 
     const render = () => {

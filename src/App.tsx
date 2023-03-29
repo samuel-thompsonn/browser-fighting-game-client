@@ -1,7 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
 import Canvas from './Canvas';
-import CharacterVisualizer from './CharacterVisualizer';
 import { CharacterStatus, ControlsEventHandler } from './InterfaceUtils';
 import ControlsHandler from './ControlsHandler';
 import controlsMap from './ControlsMap.json';
@@ -13,6 +12,8 @@ function App() {
   const [characterStates] = useState<Map<string, CharacterStatus>>(
     new Map(),
   );
+
+  const [gameWinner, setGameWinner] = useState<string|undefined>(undefined);
 
   function initSocket() {
     const apiURL = process.env.REACT_APP_API_URL;
@@ -57,8 +58,7 @@ function App() {
       characterStates.delete(removedCharacterIndex);
     });
     newSocket.on('gameComplete', ({ winnerID }:GameEndInfo) => {
-      console.log(`Player with ID ${winnerID} has won!`);
-
+      setGameWinner(winnerID);
     });
   };
 
@@ -85,6 +85,7 @@ function App() {
       <div className="Canvas-Container">
         <Canvas
           characters={characterStates}
+          gameWinner={gameWinner}
         />
       </div>
     </div>
