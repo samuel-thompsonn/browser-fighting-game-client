@@ -6,6 +6,7 @@ import ControlsHandler from './ControlsHandler';
 import controlsMap from './ControlsMap.json';
 import "./App.css";
 import GameEndInfo from './datatype/GameEndInfo';
+import CreatedCharacterMessage from './CreatedCharacterMessage';
 
 function App() {
 
@@ -13,7 +14,11 @@ function App() {
     new Map(),
   );
 
+  const [characterID, setCharacterID] = useState<string|undefined>(undefined);
+
   const [gameWinner, setGameWinner] = useState<string|undefined>(undefined);
+
+  const [controlsHandler] = useState<ControlsHandler>(initControlsHandler());
 
   function initSocket() {
     const apiURL = process.env.REACT_APP_API_URL;
@@ -45,11 +50,22 @@ function App() {
     return new ControlsHandler(...controlsHandlers);
   }
 
-  const [controlsHandler] = useState<ControlsHandler>(initControlsHandler());
+  function handleGameReset() {
+    console.log("Game reset!");
+    characterStates.clear();
+    setGameWinner(undefined);
+    setCharacterID(undefined);
+  }
+
+  // Called to respond to a request to create a character. Not called when
+  // another client in the same game creates a character.
+  function handleCreatedCharacter({ characterID }: CreatedCharacterMessage) {
+    setCharacterID(characterID);
+  }
 
   const initSocketIo = (newSocket:Socket) => {
     newSocket.on('accepted_connection', () => {
-      newSocket.emit('createCharacter');
+      // TODO: Bar other commands to server behind this?
     });
     newSocket.on('updateCharacter', (update:CharacterStatus) => {
       characterStates.set(update.id, update);
@@ -60,6 +76,8 @@ function App() {
     newSocket.on('gameComplete', ({ winnerID }:GameEndInfo) => {
       setGameWinner(winnerID);
     });
+    newSocket.on('gameReset', handleGameReset);
+    newSocket.on('createdCharacter', handleCreatedCharacter);
   };
 
   const handleKeyDown = (event:KeyboardEvent) => {
@@ -69,6 +87,14 @@ function App() {
   const handleKeyUp = (event:KeyboardEvent) => {
     controlsHandler.keyReleased(event.key);
   };
+
+  const handleRequestReset = () => {
+    socket.current.emit("resetGame");
+  }
+
+  const handleCreateCharacter = () => {
+    socket.current.emit("createCharacter");
+  }
 
   useEffect(() => {
     initSocketIo(socket.current);
@@ -81,7 +107,16 @@ function App() {
       <div className="Header-Container">
         <h1>Browser fighting game</h1>
       </div>
-      {/* Canvas should really just take in two characters, or take JSON translations of their state */}
+      <div className="Meta-controls-container">
+        <button type="button" onClick={handleRequestReset}>Reset</button>
+        <button
+          type="button"
+          onClick={handleCreateCharacter}
+          disabled={characterID !== undefined}
+        >
+          Join
+        </button>
+      </div>
       <div className="Canvas-Container">
         <Canvas
           characters={characterStates}

@@ -30,6 +30,11 @@ body {
   background-color: #2C74B3;
 }
 
+.Meta-controls-container {
+  height: 5%;
+  background-color: red;
+}
+
 canvas {
   width: 98%;
   aspect-ratio: 14/9;
