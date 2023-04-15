@@ -167,6 +167,43 @@
       "height": 64
     },
     "stride": 66
+  },
+  {
+    "id": "knockingOutLeft",
+    "numFrames": 20,
+    "statesPerFrame": 4,
+    "filePath": "ryu_sprite_sheet_flipped.png",
+    "offset": {
+      "x": 1466,
+      "y": 1025
+    },
+    "frameSize": {
+      "width": 74,
+      "height": 59
+    },
+    "fixedPoint": {
+      "x": 0,
+      "y": -38
+    },
+    "stride": -75
+  },
+  {
+    "id": "knockedOutLeft",
+    "numFrames": 15,
+    "statesPerFrame": 15,
+    "filePath": "ryu_sprite_sheet_flipped.png",
+    "offset": {
+      "x": 1317,
+      "y": 1026
+    },
+    "frameSize": {
+      "width": 72,
+      "height": 57
+    },
+    "fixedPoint": {
+      "x": 0,
+      "y": -38
+    },
+    "stride": 0
   }
-  
 ]
