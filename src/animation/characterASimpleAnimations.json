@@ -154,6 +154,21 @@
     "statesPerFrame": 4
   },
   {
+    "id": "attackLeftHeavyStartup",
+    "numFrames": 2,
+    "filePath": "ryu_sprite_sheet.png",
+    "offset": {
+      "x": 1469,
+      "y": 1087
+    },
+    "frameSize": {
+      "width": 71,
+      "height": 86
+    },
+    "stride": -72,
+    "statesPerFrame": 4
+  },
+  {
     "id": "knockback",
     "numFrames": 30,
     "statesPerFrame": 15,
@@ -175,15 +190,15 @@
     "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
       "x": 1466,
-      "y": 1025
+      "y": 994
     },
     "frameSize": {
       "width": 74,
-      "height": 59
+      "height": 90
     },
     "fixedPoint": {
       "x": 0,
-      "y": -38
+      "y": -6
     },
     "stride": -75
   },

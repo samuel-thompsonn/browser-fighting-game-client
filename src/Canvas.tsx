@@ -3,7 +3,6 @@ import './Canvas.css';
 import CharacterVisualizer from './CharacterVisualizer';
 import DrawableGameCanvas from './DrawableGameCanvas';
 import DrawableGameCanvasImpl from './DrawableGameCanvasImpl';
-import HealthVisualizer from './HealthVisualizer';
 import HealthVisualizerTray from './HealthVisualizerTray';
 import { CharacterStatus, HealthInfo } from './InterfaceUtils';
 
