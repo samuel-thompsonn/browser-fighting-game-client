@@ -46,7 +46,7 @@ function drawBackground(
 interface CanvasProps {
   characterVisualizer?:CharacterVisualizer;
   characters:Map<string, CharacterStatus>;
-  gameWinner:string|undefined;
+  gameWinner?:string|undefined;
 }
 
 function Canvas({
