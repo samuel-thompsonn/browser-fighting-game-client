@@ -19,7 +19,7 @@ function AnimationSelect({
     }
 
     return (
-        <select value={undefined} onChange={onChangeStateId}>
+        <select value={animationIndex} onChange={onChangeStateId}>
             {animationData.map((animationDescription, index) => <option key={index} value={index}>{animationDescription.id}</option>)}
         </select>
     )
@@ -51,8 +51,7 @@ function AnimationTester({ animationData }: AnimationTesterProps) {
     function advanceAnimationFrame(): void {
         setFrameIndex((frameIndex) => {
             if (animationIndex) {
-                // return (frameIndex % getNumScreenFrames(animationData[animationIndex])) + 1
-                return (frameIndex % 16) + 1
+                return (frameIndex % animationData[animationIndex].numFrames) + 1
             }
             return frameIndex
         });
