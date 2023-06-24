@@ -155,8 +155,8 @@
   },
   {
     "id": "attackLeftHeavyStartup",
-    "numFrames": 2,
-    "filePath": "ryu_sprite_sheet.png",
+    "numFrames": 6,
+    "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
       "x": 1469,
       "y": 1087
@@ -165,8 +165,50 @@
       "width": 71,
       "height": 86
     },
+    "fixedPoint": {
+      "x": 24,
+      "y": 1
+    },
     "stride": -72,
-    "statesPerFrame": 4
+    "statesPerFrame": 3
+  },
+  {
+    "id": "attackLeftHeavy",
+    "numFrames": 3,
+    "filePath": "ryu_sprite_sheet_flipped.png",
+    "offset": {
+      "x": 1325,
+      "y": 1087
+    },
+    "frameSize": {
+      "width": 71,
+      "height": 86
+    },
+    "fixedPoint": {
+      "x": 24,
+      "y": 1
+    },
+    "stride": -72,
+    "statesPerFrame": 3
+  },
+  {
+    "id": "attackLeftHeavyEndLag",
+    "numFrames": 6,
+    "filePath": "ryu_sprite_sheet_flipped.png",
+    "offset": {
+      "x": 1253,
+      "y": 1087
+    },
+    "frameSize": {
+      "width": 71,
+      "height": 86
+    },
+    "fixedPoint": {
+      "x": 24,
+      "y": 1
+    },
+    "stride": -72,
+    "statesPerFrame": 3
   },
   {
     "id": "knockback",
