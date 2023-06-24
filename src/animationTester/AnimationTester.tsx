@@ -2,94 +2,120 @@ import { ChangeEvent, useState } from "react";
 import { AnimationDescription } from "../InterfaceUtils";
 import AnimationTesterCanvas from "./AnimationTesterCanvas";
 import './AnimationTester.css'
-
-interface AnimationSelectProps {
-    animationData: AnimationDescription[]
-    animationIndex?: number
-    onSelectAnimation: (animationId: number) => void
-}
-
-function AnimationSelect({
-    animationData,
-    animationIndex,
-    onSelectAnimation
-}: AnimationSelectProps) {
-    function onChangeStateId(event: ChangeEvent<HTMLSelectElement>): void {
-        onSelectAnimation(parseInt(event.target.value))
-    }
-
-    return (
-        <select value={animationIndex} onChange={onChangeStateId}>
-            {animationData.map((animationDescription, index) => <option key={index} value={index}>{animationDescription.id}</option>)}
-        </select>
-    )
-}
+import AnimationMultiSelect from "./AnimationMultiSelect";
 
 interface AnimationTesterProps {
     animationData: AnimationDescription[]
 }
 
 function AnimationTester({ animationData }: AnimationTesterProps) {
-
-    function getStartingAnimationIndex(): number|undefined {
-        return (animationData.length > 0)? 1 : undefined
-    }
-
-    const [animationIndex, setAnimationIndex] = useState<number|undefined>(getStartingAnimationIndex())
-    const [frameIndex, setFrameIndex] = useState<number>(1);
+    const [globalFrameIndex, setGlobalFrameIndex] = useState<number>(1);
     const [animationInterval, setAnimationInterval] = useState<NodeJS.Timer>()
+    const [animationIndices, setAnimationIndices] = useState<number[]>(getStartingAnimationIndices())
 
-    function onChangeAnimationIndex(index: number) {
-        setAnimationIndex(index);
-        setFrameIndex(1);
+    function getStartingAnimationIndices(): number[] {
+        return (animationData.length > 0)? [0, 1]: []
     }
+
+    function stopPlayingAnimation(): void {
+        clearInterval(animationInterval)
+        setAnimationInterval(undefined);
+    }
+
+    function startPlayingAnimation(): void {
+        setAnimationInterval(setInterval(advanceAnimationFrame, 1000 / 30))
+    }
+    
+    function togglePlayingAnimation(): void {
+        animationInterval? stopPlayingAnimation() : startPlayingAnimation()
+    }
+
+    function onChangeAnimationIndices(newAnimationIndices: number[]): void {
+        setGlobalFrameIndex(1)
+        setAnimationIndices(newAnimationIndices)
+        if (animationInterval) {
+            stopPlayingAnimation()
+        }
+    }
+
+    function maxFrameIndex() {
+        let numFrames = 0
+        animationIndices.forEach((animationIndex) => {
+            numFrames += animationData[animationIndex].numFrames
+        })
+        return numFrames
+    }
+
+    interface CurrentAnimationInfo {
+        localFrameIndex: number
+        animationSelectionIndex?: number
+    }
+
+    // Calculates the current animation and the frame index within the
+    // current animation
+    function getCurrentAnimationInfo(): CurrentAnimationInfo {
+        let numFramesRemaining = globalFrameIndex - 1
+        for (let i = 0; i < animationIndices.length; i ++) {
+            const animationIndex = animationIndices[i]
+            if (numFramesRemaining < animationData[animationIndex].numFrames) {
+                return {
+                    localFrameIndex: numFramesRemaining + 1,
+                    animationSelectionIndex: animationIndex
+                }
+            }
+            numFramesRemaining -= animationData[animationIndex].numFrames
+        }
+        return {
+            localFrameIndex: 1,
+            animationSelectionIndex: undefined
+        }
+    }
+    
+    const { animationSelectionIndex, localFrameIndex } = getCurrentAnimationInfo()
 
     function onChangeSlider(event: ChangeEvent<HTMLInputElement>): void {
-        setFrameIndex(parseInt(event.target.value))
+        setGlobalFrameIndex(parseInt(event.target.value))
     }
 
     function advanceAnimationFrame(): void {
-        setFrameIndex((frameIndex) => {
-            if (animationIndex) {
-                return (frameIndex % animationData[animationIndex].numFrames) + 1
+        setGlobalFrameIndex((frameIndex) => {
+            if (animationSelectionIndex !== undefined) {
+                return (frameIndex % maxFrameIndex()) + 1
             }
             return frameIndex
         });
     }
 
-    function togglePlayingAnimation() {
-        if (animationInterval) {
-            console.log("Clearing animation interval")
-            clearInterval(animationInterval)
-            setAnimationInterval(undefined);
-        } else {
-            setAnimationInterval(setInterval(advanceAnimationFrame, 1000 / 30))
-        }
+
+    if (animationSelectionIndex !== undefined) {
+        console.log(`current animation: ${animationData[animationSelectionIndex].id} ${localFrameIndex}`)
     }
 
     // TODO: Add controls for playing/pausing the animation, based on the duuration of the animation.
     return (
         <div className="Animation-Tester">
-            <AnimationSelect
+            <AnimationMultiSelect
                 animationData={animationData}
-                animationIndex={animationIndex}
-                onSelectAnimation={onChangeAnimationIndex}
+                animationIndices={animationIndices}
+                onChangeAnimationIndices={onChangeAnimationIndices}
             />
-            <button onClick={togglePlayingAnimation}>
+            <button
+                disabled={animationSelectionIndex === undefined}
+                onClick={togglePlayingAnimation}
+            >
                 {animationInterval? "Stop" : "Start"}
             </button>
             <input type="range"
                 min={1}
-                disabled={!animationIndex}
-                max={animationIndex? animationData[animationIndex].numFrames : undefined}
-                value={frameIndex} onChange={onChangeSlider}
+                disabled={animationSelectionIndex === undefined}
+                max={animationSelectionIndex !== undefined? maxFrameIndex() : undefined}
+                value={globalFrameIndex} onChange={onChangeSlider}
             />
             <AnimationTesterCanvas
                 characterAnimationData={animationData}
-                stateId={animationIndex? animationData[animationIndex].id : undefined}
-                stateFrameIndex={frameIndex}
+                stateId={animationSelectionIndex !== undefined? animationData[animationSelectionIndex].id : undefined}
+                stateFrameIndex={localFrameIndex}
             />
-
         </div>
     );
 }

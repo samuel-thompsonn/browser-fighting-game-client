@@ -87,3 +87,19 @@ Objective 1.0: Add healthbars on the client side.
   - Actually, it looks like we already have health info coming in from the backend, so we can already calculate things!
 
 It might be nice to have a Canvas object that acts as an interface between React and non-react and is an intermediary between the visualizers (CharacterVisualizer, HealthVisualizer). That way I am basically constructing an interface that acts as a canvas a la 2JS or P5JS.
+
+## 6/21/2023
+
+I added the animation tester which is great for quickly checking out animations. But next I would like to add a function to it for specifying a list of animations to play in sequence, so that it is easy to set up a new animation with multiple states such as startup lag + attack + end lag.
+
+## 6/22/2023
+
+Working on animation multi select so I can chain together animations.
+
+# 6/23/2023
+
+Still working on that animation multi select!
+
+# 6/24/20233
+
+Still working on that animation multi select, it is coming along really nicely!

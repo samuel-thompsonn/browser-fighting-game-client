@@ -1,5 +1,5 @@
 import AnimationTester from './AnimationTester';
-import sampleAnimationFile from './sample_data/sampleCharacterAnimation.json'
+import sampleAnimationFile from '../animation/characterASimpleAnimations.json'
 
 function AnimationTesterPage() {
     return (
