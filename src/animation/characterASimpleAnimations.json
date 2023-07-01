@@ -154,7 +154,7 @@
     "statesPerFrame": 4
   },
   {
-    "id": "attackLeftHeavyStartup",
+    "id": "heavyAttackLeftStartup",
     "numFrames": 6,
     "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
@@ -170,10 +170,10 @@
       "y": 1
     },
     "stride": -72,
-    "statesPerFrame": 3
+    "statesPerFrame": 2
   },
   {
-    "id": "attackLeftHeavy",
+    "id": "heavyAttackLeft",
     "numFrames": 3,
     "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
@@ -192,8 +192,8 @@
     "statesPerFrame": 3
   },
   {
-    "id": "attackLeftHeavyEndLag",
-    "numFrames": 6,
+    "id": "heavyAttackLeftEndLag",
+    "numFrames": 4,
     "filePath": "ryu_sprite_sheet_flipped.png",
     "offset": {
       "x": 1253,
@@ -208,7 +208,7 @@
       "y": 1
     },
     "stride": -72,
-    "statesPerFrame": 3
+    "statesPerFrame": 2
   },
   {
     "id": "knockback",
