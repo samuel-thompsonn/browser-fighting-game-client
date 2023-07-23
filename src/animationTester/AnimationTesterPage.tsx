@@ -1,5 +1,5 @@
 import AnimationTester from './AnimationTester';
-import sampleAnimationFile from '../animation/characterASimpleAnimations.json'
+import sampleAnimationFile from '../animation/characterASimpleAnimationsSymmetrical.json'
 
 function AnimationTesterPage() {
     return (

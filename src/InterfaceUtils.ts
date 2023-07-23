@@ -21,7 +21,10 @@ export interface CollisionDataItem {
 
 export interface AnimationState {
   id: string;
-  image: HTMLImageElement;
+  images: {
+    right: HTMLImageElement
+    left: HTMLImageElement,
+  };
   imageOffset: {
     x: number;
     y: number;
@@ -32,12 +35,20 @@ export interface AnimationState {
   };
   fixedPoint?: Vector;
   collisionData?: CollisionDataItem[];
+  center: {
+    x: number;
+    y: number;
+  };
 }
 
 export interface AnimationDescription {
   id: string;
   numFrames: number;
-  filePath: string;
+  filePath?: string;
+  imageFilePaths?: {
+    right: string;
+    left: string;
+  }
   offset: {
     x: number;
     y: number;
@@ -49,6 +60,10 @@ export interface AnimationDescription {
   fixedPoint?: Vector;
   stride: number;
   statesPerFrame?: number;
+  center?: {
+    x: number;
+    y: number;
+  };
 }
 
 export interface Position {
@@ -56,10 +71,16 @@ export interface Position {
   y: number;
 }
 
+export enum Direction {
+  LEFT ='left',
+  RIGHT = 'right'
+}
+
 export interface CharacterStatus {
   id: string;
   position: Position;
   state: string;
+  direction: Direction;
   healthInfo: HealthInfo;
   collisionInfo: CollisionDataItem[];
 }

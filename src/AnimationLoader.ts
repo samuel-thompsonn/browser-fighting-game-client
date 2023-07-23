@@ -1,8 +1,8 @@
-import { AnimationState, AnimationDescription } from './InterfaceUtils';
+import AnimationFileData from './AnimationFileData';
+import { AnimationState } from './InterfaceUtils';
 
 interface AnimationLoader {
-  // eslint-disable-next-line no-unused-vars
-  loadAnimations(animationData: AnimationDescription[]): Map<string, AnimationState>;
+  loadAnimations(animationData: AnimationFileData): Map<string, AnimationState>;
 }
 
 export default AnimationLoader;

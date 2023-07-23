@@ -1,20 +1,20 @@
 import { ChangeEvent, useState } from "react";
-import { AnimationDescription } from "../InterfaceUtils";
 import AnimationTesterCanvas from "./AnimationTesterCanvas";
 import './AnimationTester.css'
 import AnimationMultiSelect from "./AnimationMultiSelect";
+import AnimationFileData from "../AnimationFileData";
 
 interface AnimationTesterProps {
-    animationData: AnimationDescription[]
+    animationData: AnimationFileData
 }
 
-function AnimationTester({ animationData }: AnimationTesterProps) {
+function AnimationTester({ animationData: { animationStates } }: AnimationTesterProps) {
     const [globalFrameIndex, setGlobalFrameIndex] = useState<number>(1);
     const [animationInterval, setAnimationInterval] = useState<NodeJS.Timer>()
     const [animationIndices, setAnimationIndices] = useState<number[]>(getStartingAnimationIndices())
 
     function getStartingAnimationIndices(): number[] {
-        return (animationData.length > 0)? [0, 1]: []
+        return (animationStates.length > 0)? [0, 1]: []
     }
 
     function stopPlayingAnimation(): void {
@@ -41,7 +41,7 @@ function AnimationTester({ animationData }: AnimationTesterProps) {
     function maxFrameIndex() {
         let numFrames = 0
         animationIndices.forEach((animationIndex) => {
-            numFrames += animationData[animationIndex].numFrames
+            numFrames += animationStates[animationIndex].numFrames
         })
         return numFrames
     }
@@ -57,13 +57,13 @@ function AnimationTester({ animationData }: AnimationTesterProps) {
         let numFramesRemaining = globalFrameIndex - 1
         for (let i = 0; i < animationIndices.length; i ++) {
             const animationIndex = animationIndices[i]
-            if (numFramesRemaining < animationData[animationIndex].numFrames) {
+            if (numFramesRemaining < animationStates[animationIndex].numFrames) {
                 return {
                     localFrameIndex: numFramesRemaining + 1,
                     animationSelectionIndex: animationIndex
                 }
             }
-            numFramesRemaining -= animationData[animationIndex].numFrames
+            numFramesRemaining -= animationStates[animationIndex].numFrames
         }
         return {
             localFrameIndex: 1,
@@ -88,14 +88,14 @@ function AnimationTester({ animationData }: AnimationTesterProps) {
 
 
     if (animationSelectionIndex !== undefined) {
-        console.log(`current animation: ${animationData[animationSelectionIndex].id} ${localFrameIndex}`)
+        console.log(`current animation: ${animationStates[animationSelectionIndex].id} ${localFrameIndex}`)
     }
 
     // TODO: Add controls for playing/pausing the animation, based on the duuration of the animation.
     return (
         <div className="Animation-Tester">
             <AnimationMultiSelect
-                animationData={animationData}
+                animationData={animationStates}
                 animationIndices={animationIndices}
                 onChangeAnimationIndices={onChangeAnimationIndices}
             />
@@ -112,8 +112,8 @@ function AnimationTester({ animationData }: AnimationTesterProps) {
                 value={globalFrameIndex} onChange={onChangeSlider}
             />
             <AnimationTesterCanvas
-                characterAnimationData={animationData}
-                stateId={animationSelectionIndex !== undefined? animationData[animationSelectionIndex].id : undefined}
+                characterAnimationData={animationStates}
+                stateId={animationSelectionIndex !== undefined? animationStates[animationSelectionIndex].id : undefined}
                 stateFrameIndex={localFrameIndex}
             />
         </div>

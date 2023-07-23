@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import DrawableGameCanvasImpl from "../DrawableGameCanvasImpl";
 import DrawableGameCanvas from "../DrawableGameCanvas";
 import CharacterVisualizer from "../CharacterVisualizer";
-import { AnimationDescription } from "../InterfaceUtils";
+import { AnimationDescription, Direction } from "../InterfaceUtils";
 
 const VIEWPORT_DIMENSIONS = {
     aspectRatio: 14/9,
@@ -49,6 +49,7 @@ function AnimationTesterCanvas({
                 id: "0",
                 position: { x: 0, y: 0},
                 state: `${stateId}${stateFrameIndex}`,
+                direction: Direction.RIGHT,
                 healthInfo: { health: 0, maxHealth: 0 },
                 collisionInfo: []
             }
