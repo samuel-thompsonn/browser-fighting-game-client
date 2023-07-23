@@ -1,6 +1,7 @@
 {
   "moveLeft": "a",
   "moveRight": "d",
+  "moveDown": "s",
   "lightAttack": "j",
   "heavyAttack": "k"
 }

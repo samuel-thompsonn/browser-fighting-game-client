@@ -277,6 +277,63 @@
         "y": -15
       },
       "stride": 0
+    },
+    {
+      "id": "enteringCrouch",
+      "numFrames": 4,
+      "statesPerFrame": 2,
+      "filePath": "ryu_sprite_sheet.png",
+      "offset": {
+        "x": 1113,
+        "y": 24
+      },
+      "frameSize": {
+        "width": 43,
+        "height": 75
+      },
+      "center": {
+        "x": 21,
+        "y": -8
+      },
+      "stride": 47
+    },
+    {
+      "id": "crouching",
+      "numFrames": 2,
+      "statesPerFrame": 2,
+      "filePath": "ryu_sprite_sheet.png",
+      "offset": {
+        "x": 1160,
+        "y": 24
+      },
+      "frameSize": {
+        "width": 43,
+        "height": 75
+      },
+      "center": {
+        "x": 21,
+        "y": -8
+      },
+      "stride": 0
+    },
+    {
+      "id": "exitingCrouch",
+      "numFrames": 2,
+      "statesPerFrame": 2,
+      "filePath": "ryu_sprite_sheet.png",
+      "offset": {
+        "x": 1113,
+        "y": 24
+      },
+      "frameSize": {
+        "width": 43,
+        "height": 75
+      },
+      "center": {
+        "x": 21,
+        "y": -8
+      },
+      "stride": 0
     }
   ]
 }
