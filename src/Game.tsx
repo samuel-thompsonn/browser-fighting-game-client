@@ -4,9 +4,14 @@ import Canvas from './Canvas';
 import { CharacterStatus, ControlsEventHandler } from './InterfaceUtils';
 import ControlsHandler from './ControlsHandler';
 import controlsMap from './ControlsMap.json';
-import "./App.css";
+import "./Game.css";
 import GameEndInfo from './datatype/GameEndInfo';
 import CreatedCharacterMessage from './CreatedCharacterMessage';
+import { useLocation } from 'react-router';
+
+interface GameState {
+  gameID: string
+}
 
 function App() {
 
@@ -19,6 +24,8 @@ function App() {
   const [gameWinner, setGameWinner] = useState<string|undefined>(undefined);
 
   const [controlsHandler] = useState<ControlsHandler>(initControlsHandler());
+
+  const { gameID } = useLocation().state as GameState
 
   function initSocket() {
     const apiURL = process.env.REACT_APP_API_URL;
@@ -105,7 +112,7 @@ function App() {
   return (
     <div className="App">
       <div className="Header-Container">
-        <h1>Browser fighting game</h1>
+        <h1>Browser fighting game (Game ID: {gameID})</h1>
       </div>
       <div className="Meta-controls-container">
         <button type="button" onClick={handleRequestReset}>Reset</button>
