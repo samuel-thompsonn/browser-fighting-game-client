@@ -18,11 +18,11 @@ interface PlayerStatus {
 export default function Lobby() {
     const SOCKET_URL = "wss://4ij89cwmg8.execute-api.us-east-1.amazonaws.com/Prod"
     const [playerStatusUpdates, setPlayerStatusUpdates] = useState<PlayerStatus[]>([])
-    const [ready, setReadiness] = useState<boolean>()
+    const [ready, setReadiness] = useState<boolean>(false)
     const { lobbyID, lobbyName } = useLocation().state as LobbyState
 
     const navigate = useNavigate()
-    const { sendJsonMessage, lastMessage, readyState } = useWebSocket(SOCKET_URL, {
+    const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(SOCKET_URL, {
         onOpen: onConnectWebsocket
     });
 
@@ -40,26 +40,27 @@ export default function Lobby() {
     }
 
     useEffect(() => {
-      if (lastMessage !== null) {
+      if (lastJsonMessage !== null) {
         console.log("Message received!")
-        console.log(lastMessage)
-        const messageData = JSON.parse(lastMessage.data)
-        switch (messageData.action) {
+        console.log(lastJsonMessage)
+        switch (lastJsonMessage.action) {
             case ('updateStatus'):
-                const statusUpdate = messageData.body as PlayerStatus
-                console.log(`updateStatus: ${statusUpdate}`)
+                const statusUpdate = lastJsonMessage.body as PlayerStatus
+                console.log(`updateStatus: ${JSON.stringify(statusUpdate)}`)
                 setPlayerStatusUpdates((prev) => prev.concat(statusUpdate))
                 break;
             case ('getAllStatusesResponse'):
-                const statusUpdates = messageData.body as PlayerStatus[]
+                const statusUpdates = lastJsonMessage.body as PlayerStatus[]
                 statusUpdates.forEach((statusUpdate) => {
-                    console.log(`updateStatus: ${statusUpdate}`)
+                    console.log(`updateStatus: ${JSON.stringify(statusUpdate)}`)
                     setPlayerStatusUpdates((prev) => prev.concat(statusUpdate))
                 })
                 break;
+            default:
+                console.log(`no route defined for action ${lastJsonMessage.action}.`)
         }
       }
-    }, [lastMessage, setPlayerStatusUpdates]);
+    }, [lastJsonMessage, setPlayerStatusUpdates]);
 
     function playerStatusList(): PlayerStatus[] {
         const playerStatusMap = new Map()
