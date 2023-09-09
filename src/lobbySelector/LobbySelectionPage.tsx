@@ -26,6 +26,9 @@ export default function LobbySelectionPage({
     return (
         <div>
             <h1>Select Lobby</h1>
+            <Link to="/lobby" state={{ lobbyID: "lobbyID", lobbyName: "lobbyName" }}>
+                DEV: lobby link
+            </Link>
             <Link to="/">
                 <button>Back to title</button>
             </Link>

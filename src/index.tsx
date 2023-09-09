@@ -8,6 +8,7 @@ import TitlePage from './title/TitlePage';
 import LobbySelectionPage from './lobbySelector/LobbySelectionPage';
 import Lobby from './lobby/Lobby';
 import LobbyManagementClientImpl from './lobbySelector/LobbyManagementClientImpl';
+import { LobbyPlayground } from './lobby/LobbyPlayground';
 
 const lobbyManagementClient = new LobbyManagementClientImpl()
 
@@ -25,6 +26,7 @@ ReactDOM.render(
         <Route path="/game" element={<Game/>}/>
         <Route path="/lobby-selection" element={lobbySelectionPage()}/>
         <Route path="/lobby" element={<Lobby/>}/>
+        <Route path="/lobby-playground" element={<LobbyPlayground/>}/>
         <Route path="editor" element={<EditorPage/>}/>
         <Route path="animation-tester" element={<AnimationTesterPage/>}/>
       </Routes>
