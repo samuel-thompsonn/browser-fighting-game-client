@@ -9,14 +9,19 @@ interface LobbyState {
 }
 
 interface PlayerStatus {
-    player: string,
+    player: string
     status: {
         ready: boolean
     }
+    connected?: boolean
+}
+
+interface PlayerDisconnectMessage {
+    player: string
 }
 
 export default function Lobby() {
-    const SOCKET_URL = "wss://4ij89cwmg8.execute-api.us-east-1.amazonaws.com/Prod"
+    const SOCKET_URL = "wss://sl603iy941.execute-api.us-east-1.amazonaws.com/Prod"
     const [playerStatusUpdates, setPlayerStatusUpdates] = useState<PlayerStatus[]>([])
     const [ready, setReadiness] = useState<boolean>(false)
     const { lobbyID, lobbyName } = useLocation().state as LobbyState
@@ -55,6 +60,18 @@ export default function Lobby() {
                     console.log(`updateStatus: ${JSON.stringify(statusUpdate)}`)
                     setPlayerStatusUpdates((prev) => prev.concat(statusUpdate))
                 })
+                break;
+            case ('playerDisconnect'):
+                const playerDisconnectMessage = lastJsonMessage.body as PlayerDisconnectMessage
+                const disconnectStatusUpdate = {
+                    player: playerDisconnectMessage.player,
+                    status: {
+                        ready: false,
+                        connected: false
+                    }
+                }
+                console.log(`Player ${disconnectStatusUpdate.player} disconnected from the lobby.`)
+                setPlayerStatusUpdates((prev) => prev.concat(disconnectStatusUpdate))
                 break;
             default:
                 console.log(`no route defined for action ${lastJsonMessage.action}.`)
