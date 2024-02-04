@@ -22,6 +22,10 @@ interface PlayerDisconnectMessage {
     player: string
 }
 
+interface StartGameMessage {
+    address: string
+}
+
 function Lobby({ signOut, user }: WithAuthenticatorProps) {
     const SOCKET_URL = "wss://t2uuwnon19.execute-api.us-east-1.amazonaws.com/Prod"
     const [playerStatusUpdates, setPlayerStatusUpdates] = useState<PlayerStatus[]>([])
@@ -74,12 +78,16 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
                 }
                 console.log(`Player ${disconnectStatusUpdate.player} disconnected from the lobby.`)
                 setPlayerStatusUpdates((prev) => prev.concat(disconnectStatusUpdate))
-                break;
+                break
+            case 'startGame':
+                const startGameMessage = lastJsonMessage.body as StartGameMessage
+                navigate('/game', { state: { gameID: 1241, address: startGameMessage.address }})
+                break
             default:
                 console.log(`no route defined for action ${lastJsonMessage.action}.`)
         }
       }
-    }, [lastJsonMessage, setPlayerStatusUpdates]);
+    }, [lastJsonMessage, setPlayerStatusUpdates, navigate]);
 
     function playerStatusList(): PlayerStatus[] {
         const playerStatusMap = new Map()
@@ -102,6 +110,7 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
         // The API will then return a game ID and/or host which we will pass as
         // state to the game.
         navigate('/game', { state: { gameID: 1241 }})
+        sendJsonMessage({ action: "startGame" })
     }
 
     async function toggleReadiness() {
@@ -109,12 +118,18 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
         // to toggle readiness status as visible to another user.
         // Should use a websocket, since we want to give live updates to each
         // other lobby member.
+        let token
+        try {
+            token = (await Auth.currentSession()).getIdToken()
+        } catch (err) {
+            token = undefined
+        }
         sendJsonMessage({
             action: "updateStatus",
             status: {
                 ready: !ready
             },
-            token: (await Auth.currentSession()).getIdToken()
+            token,
         })
         setReadiness(!ready)
     }
@@ -144,4 +159,5 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
     )
 }
 
-export default withAuthenticator(Lobby)
+// export default withAuthenticator(Lobby)
+export default Lobby
