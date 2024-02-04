@@ -1,3 +1,5 @@
+import { WithAuthenticatorProps, withAuthenticator } from "@aws-amplify/ui-react"
+import { Auth } from "aws-amplify"
 import { useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router"
 import { Link } from "react-router-dom"
@@ -20,8 +22,8 @@ interface PlayerDisconnectMessage {
     player: string
 }
 
-export default function Lobby() {
-    const SOCKET_URL = "wss://sl603iy941.execute-api.us-east-1.amazonaws.com/Prod"
+function Lobby({ signOut, user }: WithAuthenticatorProps) {
+    const SOCKET_URL = "wss://t2uuwnon19.execute-api.us-east-1.amazonaws.com/Prod"
     const [playerStatusUpdates, setPlayerStatusUpdates] = useState<PlayerStatus[]>([])
     const [ready, setReadiness] = useState<boolean>(false)
     const { lobbyID, lobbyName } = useLocation().state as LobbyState
@@ -102,7 +104,7 @@ export default function Lobby() {
         navigate('/game', { state: { gameID: 1241 }})
     }
 
-    function toggleReadiness() {
+    async function toggleReadiness() {
         // Make an API call using the lobby ID and some kind of self identifier
         // to toggle readiness status as visible to another user.
         // Should use a websocket, since we want to give live updates to each
@@ -111,13 +113,18 @@ export default function Lobby() {
             action: "updateStatus",
             status: {
                 ready: !ready
-            }
+            },
+            token: (await Auth.currentSession()).getIdToken()
         })
         setReadiness(!ready)
     }
 
     return (
         <div>
+            <div className="User-Info-Bar">
+                <p>{user?.getUsername()}</p>
+                <button onClick={signOut}>Sign out</button>
+            </div>
             <h1>Lobby: {lobbyName}</h1>
             <p>ID: {lobbyID} </p>
             <p>Connection: {connectionStatus}</p>
@@ -136,3 +143,5 @@ export default function Lobby() {
         </div>
     )
 }
+
+export default withAuthenticator(Lobby)

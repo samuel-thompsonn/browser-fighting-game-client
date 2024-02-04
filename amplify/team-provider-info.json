@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-bfgclient-dev-01110-authRole",
+      "UnauthRoleArn": "arn:aws:iam::207922868512:role/amplify-bfgclient-dev-01110-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::207922868512:role/amplify-bfgclient-dev-01110-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-bfgclient-dev-01110-deployment",
+      "UnauthRoleName": "amplify-bfgclient-dev-01110-unauthRole",
+      "StackName": "amplify-bfgclient-dev-01110",
+      "StackId": "arn:aws:cloudformation:us-east-1:207922868512:stack/amplify-bfgclient-dev-01110/85fbf280-77a3-11ee-96ca-0e87f90dd5df",
+      "AmplifyAppId": "dgc1mgaykpjuw"
+    },
+    "categories": {
+      "auth": {
+        "bfgclienta521fc09": {}
+      }
+    }
+  }
+}

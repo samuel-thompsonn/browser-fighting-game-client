@@ -1,3 +1,35 @@
+# Running the frontend
+
+```
+aws sso login
+```
+
+# Amplify instructions
+
+
+## Initial setup
+
+To create the Amplify stack:
+
+```
+# cd to the project root
+amplify init
+  name: bfgclient
+  initialize project with the above configuration: Y
+  authentication: AWS profile
+  profile: amplify-dev
+  send non-sensitive data: N
+amplify add auth
+  what configuration: Default configuration
+  how do users sign in: Username
+  Do you want to configure advanced settings? No
+```
+
+## Running the stack
+
+```amplify run, amplify publish```
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
