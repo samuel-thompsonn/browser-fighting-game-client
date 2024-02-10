@@ -47,7 +47,7 @@ export default function LobbySelectionPage({
                 </Authenticator>
             </div>
             <h1>Select Lobby</h1>
-            <Link to="/lobby" state={{ lobbyID: "lobbyID", lobbyName: "lobbyName" }}>
+            <Link to={`/lobby/lobbyID`}>
                 DEV: lobby link
             </Link>
             <Link to="/">

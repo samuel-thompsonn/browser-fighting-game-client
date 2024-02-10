@@ -1,14 +1,9 @@
 import { WithAuthenticatorProps, withAuthenticator } from "@aws-amplify/ui-react"
 import { Auth } from "aws-amplify"
 import { useEffect, useState } from "react"
-import { useLocation, useNavigate } from "react-router"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router"
+import { useParams, Link } from "react-router-dom"
 import useWebSocket, { ReadyState } from "react-use-websocket"
-
-interface LobbyState {
-    lobbyID: number
-    lobbyName: string
-}
 
 interface PlayerStatus {
     player: string
@@ -30,7 +25,7 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
     const SOCKET_URL = "wss://t2uuwnon19.execute-api.us-east-1.amazonaws.com/Prod"
     const [playerStatusUpdates, setPlayerStatusUpdates] = useState<PlayerStatus[]>([])
     const [ready, setReadiness] = useState<boolean>(false)
-    const { lobbyID, lobbyName } = useLocation().state as LobbyState
+    const { lobbyID } = useParams();
 
     const navigate = useNavigate()
     const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(SOCKET_URL, {
@@ -81,7 +76,7 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
                 break
             case 'startGame':
                 const startGameMessage = lastJsonMessage.body as StartGameMessage
-                navigate('/game', { state: { gameID: 1241, address: startGameMessage.address }})
+                navigate(`/game/${lobbyID}`, { state: { gameID: 1241, address: startGameMessage.address }})
                 break
             default:
                 console.log(`no route defined for action ${lastJsonMessage.action}.`)
@@ -109,8 +104,10 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
         // TODO: Have this make a call to an API orchestrating starting game.
         // The API will then return a game ID and/or host which we will pass as
         // state to the game.
-        navigate('/game', { state: { gameID: 1241 }})
         sendJsonMessage({ action: "startGame" })
+        // TODO: Remove the navigation below since that is done in response to
+        // the incoming message
+        navigate(`/game/${lobbyID}`, { state: { gameID: 1241, address: "address" }})
     }
 
     async function toggleReadiness() {
@@ -140,7 +137,8 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
                 <p>{user?.getUsername()}</p>
                 <button onClick={signOut}>Sign out</button>
             </div>
-            <h1>Lobby: {lobbyName}</h1>
+            {/* TODO: Derive lobby name from Lobby Action REST API */}
+            <h1>Lobby: {"Lobby Name Placeholder"}</h1>
             <p>ID: {lobbyID} </p>
             <p>Connection: {connectionStatus}</p>
             <Link to="/lobby-selection">

@@ -1,5 +1,7 @@
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from "react-router"
 import Canvas from './Canvas';
 import { CharacterStatus, ControlsEventHandler } from './InterfaceUtils';
 import ControlsHandler from './ControlsHandler';
@@ -7,7 +9,6 @@ import controlsMap from './ControlsMap.json';
 import "./Game.css";
 import GameEndInfo from './datatype/GameEndInfo';
 import CreatedCharacterMessage from './CreatedCharacterMessage';
-import { useLocation } from 'react-router';
 
 interface GameState {
   gameID: string
@@ -26,6 +27,10 @@ function App() {
   const [controlsHandler] = useState<ControlsHandler>(initControlsHandler());
 
   const { gameID } = useLocation().state as GameState
+
+  const { lobbyID } = useParams()
+
+  const navigate = useNavigate();
 
   function initSocket() {
     const apiURL = process.env.REACT_APP_API_URL;
@@ -103,6 +108,10 @@ function App() {
     socket.current.emit("createCharacter");
   }
 
+  const handleBackToLobby = () => {
+    navigate(`/lobby/${lobbyID}`)
+  }
+
   useEffect(() => {
     initSocketIo(socket.current);
     document.addEventListener('keydown', handleKeyDown);
@@ -112,7 +121,7 @@ function App() {
   return (
     <div className="App">
       <div className="Header-Container">
-        <h1>Browser fighting game (Game ID: {gameID})</h1>
+        <h1>Browser fighting game (Game ID: {gameID}, Lobby ID: {lobbyID})</h1>
       </div>
       <div className="Meta-controls-container">
         <button type="button" onClick={handleRequestReset}>Reset</button>
@@ -122,6 +131,12 @@ function App() {
           disabled={characterID !== undefined}
         >
           Join
+        </button>
+        <button
+          type="button"
+          onClick={handleBackToLobby}
+        >
+          Back to lobby
         </button>
       </div>
       <div className="Canvas-Container">
