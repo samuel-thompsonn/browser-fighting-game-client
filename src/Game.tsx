@@ -9,6 +9,7 @@ import controlsMap from './ControlsMap.json';
 import "./Game.css";
 import GameEndInfo from './datatype/GameEndInfo';
 import CreatedCharacterMessage from './CreatedCharacterMessage';
+import GameStartInfo from './datatype/GameStartInfo';
 
 interface GameState {
   gameID: string
@@ -23,6 +24,8 @@ function App() {
   const [characterID, setCharacterID] = useState<string|undefined>(undefined);
 
   const [gameWinner, setGameWinner] = useState<string|undefined>(undefined);
+
+  const [gameStartTime, setGameStartTime] = useState<Date|undefined>(undefined);
 
   const [controlsHandler] = useState<ControlsHandler>(initControlsHandler());
 
@@ -85,6 +88,10 @@ function App() {
     newSocket.on('removeCharacter', (removedCharacterIndex:string) => {
       characterStates.delete(removedCharacterIndex);
     });
+    newSocket.on('gameStarting', ({ gameStartTime }: GameStartInfo) => {
+      console.log(`Game starting. Current time: ${new Date()}. Start time: ${gameStartTime}`);
+      setGameStartTime(gameStartTime);
+    })
     newSocket.on('gameComplete', ({ winnerID }:GameEndInfo) => {
       setGameWinner(winnerID);
     });
@@ -143,6 +150,7 @@ function App() {
         <Canvas
           characters={characterStates}
           gameWinner={gameWinner}
+          gameStartTime={gameStartTime}
         />
       </div>
     </div>

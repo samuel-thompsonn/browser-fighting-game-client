@@ -47,15 +47,20 @@ interface CanvasProps {
   characterVisualizer?:CharacterVisualizer;
   characters:Map<string, CharacterStatus>;
   gameWinner?:string|undefined;
+  gameStartTime?: Date;
 }
 
 function Canvas({
   characterVisualizer = new CharacterVisualizer(),
   characters,
   gameWinner,
+  gameStartTime,
 }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const healthVisualizerTray = new HealthVisualizerTray(); // Ideally should be injected.
+
+
+  console.log(`Game start time: ${gameStartTime}`)
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -78,6 +83,9 @@ function Canvas({
     );
 
     let animationFrameId: number;
+    
+    const loadingScreenImage = new Image();
+    loadingScreenImage.src = "../gui/loading_screen_placeholder.webp";
 
     const backgroundImage = new Image();
     backgroundImage.src = "../backgrounds/sf2-gif-1.gif";
@@ -92,10 +100,28 @@ function Canvas({
       // alert('no image found with that url.');
     };
 
+    const drawLoadingScreen = (guiCanvas: DrawableGameCanvas) => {
+      guiCanvas.drawImage(
+        loadingScreenImage,
+        0,
+        0,
+        1000,
+        800,
+        0,
+        0,
+        0.5,
+        0.8,
+      );
+    }
+
     const draw = (
       canvas: DrawableGameCanvas,
       guiCanvas: DrawableGameCanvas
     ) => {
+      if (!gameStartTime) {
+        drawLoadingScreen(guiCanvas);
+        return;
+      }
       // eslint-disable-next-line no-param-reassign
       drawBackground(backgroundImage, canvas);
 
@@ -110,11 +136,15 @@ function Canvas({
       
       healthVisualizerTray.drawSelf(guiCanvas, characterHealths);
 
+      const timeUntilGameStart = gameStartTime && (new Date(gameStartTime).getTime() - new Date().getTime());
+
       // Mark (0, 0) so I can easily tell where the camera is positioned.
       canvas.setFillStyle("red");
       canvas.fillRectangle(-5, -5, 10, 10);
       if (gameWinner) {
         guiCanvas.drawText(`Player ${gameWinner} wins!`, 0.15, 0.5, 100, 'red', 'black');
+      } else if (timeUntilGameStart && timeUntilGameStart > 0) {
+        guiCanvas.drawText(`${timeUntilGameStart / 1000} seconds`, 0.15, 0.5, 100, 'red', 'black');
       }
     };
 

@@ -2,6 +2,7 @@
 
 ```
 aws sso login
+npm run start
 ```
 
 # Amplify instructions
