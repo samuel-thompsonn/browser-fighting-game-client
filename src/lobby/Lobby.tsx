@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { useParams, Link } from "react-router-dom"
 import useWebSocket, { ReadyState } from "react-use-websocket"
+import LobbyActionClient from "./LobbyActionClient"
 
 interface PlayerStatus {
     player: string
@@ -21,7 +22,11 @@ interface StartGameMessage {
     address: string
 }
 
-function Lobby({ signOut, user }: WithAuthenticatorProps) {
+interface LobbyProps extends WithAuthenticatorProps {
+    lobbyActionClient: LobbyActionClient
+}
+
+function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
     const SOCKET_URL = "wss://lobby-action-ws.sam-thompson-test-development.link"
     const [playerStatusUpdates, setPlayerStatusUpdates] = useState<PlayerStatus[]>([])
     const [ready, setReadiness] = useState<boolean>(false)
@@ -75,6 +80,7 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
                 setPlayerStatusUpdates((prev) => prev.concat(disconnectStatusUpdate))
                 break
             case 'startGame':
+                console.log("Received signal to start the game!")
                 const startGameMessage = lastJsonMessage.body as StartGameMessage
                 navigate(`/game/${lobbyID}`, { state: { gameID: 1241, address: startGameMessage.address }})
                 break
@@ -101,13 +107,11 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
     }[readyState];
 
     function handleStartGame() {
-        // TODO: Have this make a call to an API orchestrating starting game.
-        // The API will then return a game ID and/or host which we will pass as
-        // state to the game.
-        sendJsonMessage({ action: "startGame" })
-        // TODO: Remove the navigation below since that is done in response to
-        // the incoming message
-        navigate(`/game/${lobbyID}`, { state: { gameID: 1241, address: "address" }})
+        lobbyActionClient.startGame().then((response) => {
+            if (!response.ok) {
+                console.log(`Failed to start game: ${response}`)
+            }
+        });
     }
 
     async function toggleReadiness() {

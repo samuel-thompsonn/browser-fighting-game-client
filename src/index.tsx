@@ -12,14 +12,22 @@ import LobbySelectionPage from './lobbySelector/LobbySelectionPage';
 import Lobby from './lobby/Lobby';
 import LobbyManagementClientImpl from './lobbySelector/LobbyManagementClientImpl';
 import { LobbyPlayground } from './lobby/LobbyPlayground';
+import LobbyActionClientImpl from './lobby/LobbyActionClientImpl';
 
 Amplify.configure(awsconfig);
 
 const lobbyManagementClient = new LobbyManagementClientImpl()
+const lobbyActionClient = new LobbyActionClientImpl()
 
 function lobbySelectionPage() {
   return <LobbySelectionPage
     lobbyManagementClient={lobbyManagementClient}
+  />
+}
+
+function lobby() {
+  return <Lobby
+    lobbyActionClient={lobbyActionClient}
   />
 }
 
@@ -30,7 +38,7 @@ ReactDOM.render(
         <Route path="/" element={<TitlePage/>}/>
         <Route path="/game/:lobbyID" element={<Game/>}/>
         <Route path="/lobby-selection" element={lobbySelectionPage()}/>
-        <Route path="/lobby/:lobbyID" element={<Lobby/>}/>
+        <Route path="/lobby/:lobbyID" element={lobby()}/>
         <Route path="/lobby-playground" element={<LobbyPlayground/>}/>
         <Route path="editor" element={<EditorPage/>}/>
         <Route path="animation-tester" element={<AnimationTesterPage/>}/>
