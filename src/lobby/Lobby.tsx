@@ -22,7 +22,7 @@ interface StartGameMessage {
 }
 
 function Lobby({ signOut, user }: WithAuthenticatorProps) {
-    const SOCKET_URL = "wss://t2uuwnon19.execute-api.us-east-1.amazonaws.com/Prod"
+    const SOCKET_URL = "wss://lobby-action-ws.sam-thompson-test-development.link"
     const [playerStatusUpdates, setPlayerStatusUpdates] = useState<PlayerStatus[]>([])
     const [ready, setReadiness] = useState<boolean>(false)
     const { lobbyID } = useParams();
@@ -121,8 +121,10 @@ function Lobby({ signOut, user }: WithAuthenticatorProps) {
         } catch (err) {
             token = undefined
         }
+        const identityID = (await Auth.currentCredentials()).identityId
         sendJsonMessage({
             action: "updateStatus",
+            identityID,
             status: {
                 ready: !ready
             },
