@@ -37,14 +37,14 @@ export default function LobbySelectionPage({
     return (
         <div>
             <div className="Navigation-Bar">
-                <Authenticator>
+                {/* <Authenticator>
                     {({ signOut, user }) => (
                         <div>
                             <p>{user?.getUsername()}</p>
                             <button onClick={() => signOutWrapper(signOut)}>Sign out</button>
                         </div>
                     )}
-                </Authenticator>
+                </Authenticator> */}
             </div>
             <h1>Select Lobby</h1>
             <Link to={`/lobby/lobbyID`}>
