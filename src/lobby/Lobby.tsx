@@ -113,18 +113,13 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
     async function handleStartGameDebug() {
         console.log("calling debug version of starting game");
         const requestBody = { players: debugLobbyPlayers };
-        const startGameResponse = await fetch('http://localhost:3001/start-game', {
+        fetch('http://localhost:3001/start-game', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(requestBody),
         });
-        if (startGameResponse.ok) {
-            const { gameID } = await startGameResponse.json();
-            console.log(`Got a response from the local game server. gameID=${gameID}`)
-            navigate(`/game/${lobbyID}/${gameID}`, { state: { address: 'http://localhost:3001' }})
-        }
     }
 
     function handleStartGame() {
