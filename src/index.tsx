@@ -36,7 +36,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<TitlePage/>}/>
-        <Route path="/game/:lobbyID" element={<Game/>}/>
+        <Route path="/game/:lobbyID/:gameID" element={<Game/>}/>
         <Route path="/lobby-selection" element={lobbySelectionPage()}/>
         <Route path="/lobby/:lobbyID" element={lobby()}/>
         <Route path="/lobby-playground" element={<LobbyPlayground/>}/>

@@ -11,10 +11,6 @@ import GameEndInfo from './datatype/GameEndInfo';
 import CreatedCharacterMessage from './CreatedCharacterMessage';
 import GameStartInfo from './datatype/GameStartInfo';
 
-interface GameState {
-  gameID: string
-}
-
 function App() {
 
   const [characterStates] = useState<Map<string, CharacterStatus>>(
@@ -27,11 +23,13 @@ function App() {
 
   const [gameStartTime, setGameStartTime] = useState<Date|undefined>(undefined);
 
+  const [isDebug, setDebugMode] = useState<boolean>(true)
+
+  const [debugIdentity, setDebugIdentity] = useState<string>('PlayerID1')
+
   const [controlsHandler] = useState<ControlsHandler>(initControlsHandler());
 
-  const { gameID } = useLocation().state as GameState
-
-  const { lobbyID } = useParams()
+  const { lobbyID, gameID } = useParams()
 
   const navigate = useNavigate();
 
@@ -45,22 +43,21 @@ function App() {
 
   const socket = useRef<Socket>(initSocket());
 
+  const emitControlsChange = (controlLabel: string, status: 'pressed' | 'released') => {
+    socket.current.emit('controlsChange', {
+      controlsChange: {
+        control: controlLabel,
+        status,
+      }
+    });
+  }
+
   function initControlsHandler(): ControlsHandler {
     const controlsHandlers: ControlsEventHandler[] = Object.entries(controlsMap)
       .map(([controlLabel, controlKey]) => ({
         key: controlKey,
-        onPress: () => {
-          socket.current.emit('controlsChange', {
-            control: controlLabel,
-            status: 'pressed',
-          });
-        },
-        onRelease: () => {
-          socket.current.emit('controlsChange', {
-            control: controlLabel,
-            status: 'released',
-          });
-        },
+        onPress: () => emitControlsChange(controlLabel, 'pressed'),
+        onRelease: () => emitControlsChange(controlLabel, 'released'),
       }));
     return new ControlsHandler(...controlsHandlers);
   }
@@ -88,7 +85,7 @@ function App() {
     newSocket.on('removeCharacter', (removedCharacterIndex:string) => {
       characterStates.delete(removedCharacterIndex);
     });
-    newSocket.on('gameStarting', ({ gameStartTime }: GameStartInfo) => {
+    newSocket.on('startGame', ({ gameStartTime }: GameStartInfo) => {
       console.log(`Game starting. Current time: ${new Date()}. Start time: ${gameStartTime}`);
       setGameStartTime(gameStartTime);
     })
@@ -107,38 +104,46 @@ function App() {
     controlsHandler.keyReleased(event.key);
   };
 
-  const handleRequestReset = () => {
-    socket.current.emit("resetGame");
-  }
-
-  const handleCreateCharacter = () => {
-    socket.current.emit("createCharacter");
-  }
-
   const handleBackToLobby = () => {
     navigate(`/lobby/${lobbyID}`)
   }
 
   useEffect(() => {
     initSocketIo(socket.current);
+    // TODO: Replace this with actual identity
+    if (!isDebug) {
+      socket.current.emit('sendIdentity', { playerID: 'PlayerID1'});
+      socket.current.emit('joinGame', { gameID: gameID})
+    }
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
   }, []);
 
+  const debugHandleSendIdentity = () => {
+    socket.current.emit('sendIdentity', { playerID: debugIdentity });
+  }
+
+  const debugHandleJoinGame = () => {
+    socket.current.emit('joinGame', { gameID: gameID });
+  }
+
   return (
     <div className="App">
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <input type="checkbox" checked={isDebug} title={"hello"} onChange={() => setDebugMode(!isDebug)}/>
+        <p onClick={() => setDebugMode(!isDebug)}>Debug mode</p>
+      </div>
+      {isDebug? (
+        <>
+          <input value={debugIdentity} onChange={(event) => setDebugIdentity(event.target.value)}/>
+          <button onClick={debugHandleSendIdentity}>Send identity</button>
+          <button onClick={debugHandleJoinGame}>Join game</button>
+        </>
+      ) : null}
       <div className="Header-Container">
         <h1>Browser fighting game (Game ID: {gameID}, Lobby ID: {lobbyID})</h1>
       </div>
       <div className="Meta-controls-container">
-        <button type="button" onClick={handleRequestReset}>Reset</button>
-        <button
-          type="button"
-          onClick={handleCreateCharacter}
-          disabled={characterID !== undefined}
-        >
-          Join
-        </button>
         <button
           type="button"
           onClick={handleBackToLobby}

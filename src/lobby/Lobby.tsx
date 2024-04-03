@@ -20,6 +20,7 @@ interface PlayerDisconnectMessage {
 
 interface StartGameMessage {
     address: string
+    gameID: string
 }
 
 interface LobbyProps extends WithAuthenticatorProps {
@@ -30,6 +31,9 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
     const SOCKET_URL = "wss://lobby-action-ws.sam-thompson-test-development.link"
     const [playerStatusUpdates, setPlayerStatusUpdates] = useState<PlayerStatus[]>([])
     const [ready, setReadiness] = useState<boolean>(false)
+    const [isDebug, setDebugMode] = useState<boolean>(true)
+    // TODO: Add configurable debug players list to customize expected players list.
+    const [debugLobbyPlayers, setDebugLobbyPlayers] = useState<string[]>(['PlayerID1','PlayerID2']);
     const { lobbyID } = useParams();
 
     const navigate = useNavigate()
@@ -82,7 +86,7 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
             case 'startGame':
                 console.log("Received signal to start the game!")
                 const startGameMessage = lastJsonMessage.body as StartGameMessage
-                navigate(`/game/${lobbyID}`, { state: { gameID: 1241, address: startGameMessage.address }})
+                navigate(`/game/${lobbyID}/${startGameMessage.gameID}`, { state: { address: startGameMessage.address }})
                 break
             default:
                 console.log(`no route defined for action ${lastJsonMessage.action}.`)
@@ -105,6 +109,23 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
       [ReadyState.CLOSED]: 'Closed',
       [ReadyState.UNINSTANTIATED]: 'Uninstantiated',
     }[readyState];
+
+    async function handleStartGameDebug() {
+        console.log("calling debug version of starting game");
+        const requestBody = { players: debugLobbyPlayers };
+        const startGameResponse = await fetch('http://localhost:3001/start-game', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody),
+        });
+        if (startGameResponse.ok) {
+            const { gameID } = await startGameResponse.json();
+            console.log(`Got a response from the local game server. gameID=${gameID}`)
+            navigate(`/game/${lobbyID}/${gameID}`, { state: { address: 'http://localhost:3001' }})
+        }
+    }
 
     function handleStartGame() {
         lobbyActionClient.startGame().then((response) => {
@@ -137,12 +158,26 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
         setReadiness(!ready)
     }
 
+    const handleDebugLobbyPlayerChange = (newValueString: string) => {
+        setDebugLobbyPlayers(newValueString.split(',').map((value) => value.trim()));
+    }
+
     return (
         <div>
             <div className="User-Info-Bar">
                 <p>{user?.getUsername()}</p>
                 <button onClick={signOut}>Sign out</button>
             </div>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+                <input type="checkbox" checked={isDebug} title={"hello"} onChange={() => setDebugMode(!isDebug)}/>
+                <p onClick={() => setDebugMode(!isDebug)}>Debug mode</p>
+            </div>
+            {isDebug? (
+                <>
+                    Player IDs:
+                    <input value={debugLobbyPlayers} onChange={(event) => handleDebugLobbyPlayerChange(event.target.value)}/>
+                </>
+            ) : null}
             {/* TODO: Derive lobby name from Lobby Action REST API */}
             <h1>Lobby: {"Lobby Name Placeholder"}</h1>
             <p>ID: {lobbyID} </p>
@@ -155,7 +190,7 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
                 <option id="0">Ryu</option>
             </select>
             <button onClick={toggleReadiness}>{!ready? "Ready" : "Not ready"}</button>
-            <button onClick={handleStartGame} disabled={!ready}>Start Game</button>
+            <button onClick={isDebug? handleStartGameDebug : handleStartGame} disabled={!ready}>Start Game</button>
             {
                 playerStatusList().map((playerStatus) => <p key={playerStatus.player}>{JSON.stringify(playerStatus)}</p>)
             }
