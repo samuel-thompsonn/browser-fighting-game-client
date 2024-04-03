@@ -85,10 +85,10 @@ function Canvas({
     let animationFrameId: number;
     
     const loadingScreenImage = new Image();
-    loadingScreenImage.src = "../gui/loading_screen_placeholder.webp";
+    loadingScreenImage.src = '/gui/loading_screen_placeholder.webp';
 
     const backgroundImage = new Image();
-    backgroundImage.src = "../backgrounds/sf2-gif-1.gif";
+    backgroundImage.src = "/backgrounds/sf2-gif-1.gif";
 
     // const image = imageRef.current;
     const image = new Image();
@@ -142,7 +142,7 @@ function Canvas({
       canvas.setFillStyle("red");
       canvas.fillRectangle(-5, -5, 10, 10);
       if (gameWinner) {
-        guiCanvas.drawText(`Player ${gameWinner} wins!`, 0.15, 0.5, 100, 'red', 'black');
+        guiCanvas.drawText(`Player ${gameWinner} wins!`, 0.15, 0.5, 50, 'red', 'black');
       } else if (timeUntilGameStart && timeUntilGameStart > 0) {
         guiCanvas.drawText(`${timeUntilGameStart / 1000} seconds`, 0.15, 0.5, 100, 'red', 'black');
       }

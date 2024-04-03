@@ -30,7 +30,7 @@ function generateAnimationState(
 
 function getImageFromFile(imageFilePath: string): HTMLImageElement {
   const image = new Image()
-  image.src = `../sprites/${imageFilePath}`
+  image.src = `/sprites/${imageFilePath}`
   return image
 }
 
