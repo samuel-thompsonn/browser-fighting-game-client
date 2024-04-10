@@ -10,6 +10,8 @@ import "./Game.css";
 import GameEndInfo from './datatype/GameEndInfo';
 import CreatedCharacterMessage from './CreatedCharacterMessage';
 import GameStartInfo from './datatype/GameStartInfo';
+import { Auth } from 'aws-amplify';
+import { useQuery } from '@tanstack/react-query';
 
 function App() {
 
@@ -44,6 +46,21 @@ function App() {
   }
 
   const socket = useRef<Socket>(initSocket());
+
+  const sendIdentity = async () => {
+    const identityID = (await Auth.currentCredentials()).identityId
+    socket.current.emit('sendIdentity', { playerID: identityID })
+    socket.current.emit('joinGame', { gameID: gameID})
+    console.log('Sent sendIdentity and joinGame signals!')
+  }
+
+  const { isPending: isSendIdentityPending} = useQuery({
+    queryKey: ['repoData'],
+    queryFn: async () => {
+      if (!isDebug) await sendIdentity()
+      return { status: 'done' }
+    }
+  })
 
   const emitControlsChange = (controlLabel: string, status: 'pressed' | 'released') => {
     socket.current.emit('controlsChange', {
@@ -112,11 +129,6 @@ function App() {
 
   useEffect(() => {
     initSocketIo(socket.current);
-    // TODO: Replace this with actual identity
-    if (!isDebug) {
-      socket.current.emit('sendIdentity', { playerID: 'PlayerID1'});
-      socket.current.emit('joinGame', { gameID: gameID})
-    }
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('keyup', handleKeyUp);
   }, []);
@@ -152,6 +164,7 @@ function App() {
         >
           Back to lobby
         </button>
+        sending identity: {isSendIdentityPending}
       </div>
       <div className="Canvas-Container">
         <Canvas

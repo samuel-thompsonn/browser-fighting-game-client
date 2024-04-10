@@ -13,6 +13,7 @@ import Lobby from './lobby/Lobby';
 import LobbyManagementClientImpl from './lobbySelector/LobbyManagementClientImpl';
 import { LobbyPlayground } from './lobby/LobbyPlayground';
 import LobbyActionClientImpl from './lobby/LobbyActionClientImpl';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 Amplify.configure(awsconfig);
 
@@ -34,18 +35,22 @@ function lobby() {
 const container = document.getElementById('root')
 const root = createRoot(container!)
 
+const queryClient = new QueryClient();
+
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<TitlePage/>}/>
-        <Route path="/game/:lobbyID/:gameID" element={<Game/>}/>
-        <Route path="/lobby-selection" element={lobbySelectionPage()}/>
-        <Route path="/lobby/:lobbyID" element={lobby()}/>
-        <Route path="/lobby-playground" element={<LobbyPlayground/>}/>
-        <Route path="editor" element={<EditorPage/>}/>
-        <Route path="animation-tester" element={<AnimationTesterPage/>}/>
-      </Routes>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<TitlePage/>}/>
+          <Route path="/game/:lobbyID/:gameID" element={<Game/>}/>
+          <Route path="/lobby-selection" element={lobbySelectionPage()}/>
+          <Route path="/lobby/:lobbyID" element={lobby()}/>
+          <Route path="/lobby-playground" element={<LobbyPlayground/>}/>
+          <Route path="editor" element={<EditorPage/>}/>
+          <Route path="animation-tester" element={<AnimationTesterPage/>}/>
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );
