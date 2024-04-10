@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { useLocation, useNavigate } from "react-router"
 import Canvas from './Canvas';
 import { CharacterStatus, ControlsEventHandler } from './InterfaceUtils';
@@ -17,13 +17,15 @@ function App() {
     new Map(),
   );
 
+  const [searchParams] = useSearchParams();
+
   const [characterID, setCharacterID] = useState<string|undefined>(undefined);
 
   const [gameWinner, setGameWinner] = useState<string|undefined>(undefined);
 
   const [gameStartTime, setGameStartTime] = useState<Date|undefined>(undefined);
 
-  const [isDebug, setDebugMode] = useState<boolean>(true)
+  const [isDebug, setDebugMode] = useState<boolean>(searchParams.has('debug'));
 
   const [debugIdentity, setDebugIdentity] = useState<string>('PlayerID1')
 

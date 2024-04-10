@@ -2,7 +2,7 @@ import { WithAuthenticatorProps, withAuthenticator } from "@aws-amplify/ui-react
 import { Auth } from "aws-amplify"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useSearchParams } from "react-router-dom"
 import useWebSocket, { ReadyState } from "react-use-websocket"
 import LobbyActionClient from "./LobbyActionClient"
 
@@ -29,9 +29,10 @@ interface LobbyProps extends WithAuthenticatorProps {
 
 function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
     const SOCKET_URL = "wss://lobby-action-ws.sam-thompson-test-development.link"
+    const [searchParams] = useSearchParams();
     const [playerStatusUpdates, setPlayerStatusUpdates] = useState<PlayerStatus[]>([])
     const [ready, setReadiness] = useState<boolean>(false)
-    const [isDebug, setDebugMode] = useState<boolean>(true)
+    const [isDebug, setDebugMode] = useState<boolean>(searchParams.has('debug'));
     // TODO: Add configurable debug players list to customize expected players list.
     const [debugLobbyPlayers, setDebugLobbyPlayers] = useState<string[]>(['PlayerID1','PlayerID2']);
     const { lobbyID } = useParams();

@@ -5,6 +5,8 @@ aws sso login
 npm run start
 ```
 
+Currently hosted at https://frontend.sam-thompson-test-development.link
+
 # Amplify instructions
 
 
