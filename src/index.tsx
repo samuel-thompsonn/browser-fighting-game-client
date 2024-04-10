@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Amplify } from 'aws-amplify';
 import awsconfig from './aws-exports';
@@ -31,7 +31,10 @@ function lobby() {
   />
 }
 
-ReactDOM.render(
+const container = document.getElementById('root')
+const root = createRoot(container!)
+
+root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
@@ -44,6 +47,5 @@ ReactDOM.render(
         <Route path="animation-tester" element={<AnimationTesterPage/>}/>
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById('root'),
+  </React.StrictMode>
 );

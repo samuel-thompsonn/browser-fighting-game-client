@@ -1,10 +1,15 @@
-import { WithAuthenticatorProps, withAuthenticator } from "@aws-amplify/ui-react"
+import { WithAuthenticatorProps } from "@aws-amplify/ui-react"
 import { Auth } from "aws-amplify"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { useParams, Link, useSearchParams } from "react-router-dom"
 import useWebSocket, { ReadyState } from "react-use-websocket"
 import LobbyActionClient from "./LobbyActionClient"
+
+interface PlayerStatusMessage {
+    action: string
+    body: unknown
+}
 
 interface PlayerStatus {
     player: string
@@ -56,24 +61,25 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
     }
 
     useEffect(() => {
-      if (lastJsonMessage !== null) {
+      if (lastJsonMessage !== null && lastJsonMessage !== undefined) {
+        const playerStatusMessage = lastJsonMessage as PlayerStatusMessage
         console.log("Message received!")
         console.log(lastJsonMessage)
-        switch (lastJsonMessage.action) {
+        switch (playerStatusMessage.action) {
             case ('updateStatus'):
-                const statusUpdate = lastJsonMessage.body as PlayerStatus
+                const statusUpdate = playerStatusMessage.body as PlayerStatus
                 console.log(`updateStatus: ${JSON.stringify(statusUpdate)}`)
                 setPlayerStatusUpdates((prev) => prev.concat(statusUpdate))
                 break;
             case ('getAllStatusesResponse'):
-                const statusUpdates = lastJsonMessage.body as PlayerStatus[]
+                const statusUpdates = playerStatusMessage.body as PlayerStatus[]
                 statusUpdates.forEach((statusUpdate) => {
                     console.log(`updateStatus: ${JSON.stringify(statusUpdate)}`)
                     setPlayerStatusUpdates((prev) => prev.concat(statusUpdate))
                 })
                 break;
             case ('playerDisconnect'):
-                const playerDisconnectMessage = lastJsonMessage.body as PlayerDisconnectMessage
+                const playerDisconnectMessage = playerStatusMessage.body as PlayerDisconnectMessage
                 const disconnectStatusUpdate = {
                     player: playerDisconnectMessage.player,
                     status: {
@@ -86,14 +92,14 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
                 break
             case 'startGame':
                 console.log("Received signal to start the game!")
-                const startGameMessage = lastJsonMessage.body as StartGameMessage
+                const startGameMessage = playerStatusMessage.body as StartGameMessage
                 navigate(`/game/${lobbyID}/${startGameMessage.gameID}`, { state: { address: startGameMessage.address }})
                 break
             default:
-                console.log(`no route defined for action ${lastJsonMessage.action}.`)
+                console.log(`no route defined for action ${playerStatusMessage.action}.`)
         }
       }
-    }, [lastJsonMessage, setPlayerStatusUpdates, navigate]);
+    }, [lastJsonMessage, setPlayerStatusUpdates, navigate, lobbyID]);
 
     function playerStatusList(): PlayerStatus[] {
         const playerStatusMap = new Map()
