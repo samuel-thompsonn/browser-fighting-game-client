@@ -22,7 +22,7 @@ export default function LobbyEntry({
             <td>{lobbyStatus}</td>
             <td>{lobbyPlayerCount}/{lobbyMaxPlayerCount} Players</td>
             <td>
-                <Link to="/lobby" state={{ lobbyID: lobbyID, lobbyName: lobbyName }}>
+                <Link to={`/lobby/${lobbyID}`} state={{ lobbyName }}>
                     <button>Join</button>
                 </Link>
             </td>
