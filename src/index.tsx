@@ -14,6 +14,7 @@ import LobbyManagementClientImpl from './lobbySelector/LobbyManagementClientImpl
 import { LobbyPlayground } from './lobby/LobbyPlayground';
 import LobbyActionClientImpl from './lobby/LobbyActionClientImpl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import LobbyCreatorPage from './lobbyCreator/LobbyCreatorPage';
 
 Amplify.configure(awsconfig);
 
@@ -22,6 +23,12 @@ const lobbyActionClient = new LobbyActionClientImpl()
 
 function lobbySelectionPage() {
   return <LobbySelectionPage
+    lobbyManagementClient={lobbyManagementClient}
+  />
+}
+
+function lobbyCreatorPage() {
+  return <LobbyCreatorPage
     lobbyManagementClient={lobbyManagementClient}
   />
 }
@@ -45,6 +52,7 @@ root.render(
           <Route path="/" element={<TitlePage/>}/>
           <Route path="/game/:lobbyID/:gameID" element={<Game/>}/>
           <Route path="/lobby-selection" element={lobbySelectionPage()}/>
+          <Route path="/create-lobby" element={lobbyCreatorPage()}/>
           <Route path="/lobby/:lobbyID" element={lobby()}/>
           <Route path="/lobby-playground" element={<LobbyPlayground/>}/>
           <Route path="editor" element={<EditorPage/>}/>

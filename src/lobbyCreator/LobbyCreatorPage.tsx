@@ -1,7 +1,35 @@
-export default function LobbyCreatorPage() {
+import { useState } from "react";
+import LobbyManagementClient from "../lobbySelector/LobbyManagementClient";
+
+interface LobbyCreatorPageProps {
+    lobbyManagementClient: LobbyManagementClient
+}
+
+export default function LobbyCreatorPage({
+    lobbyManagementClient
+}: LobbyCreatorPageProps) {
+    const [lobbyName, setLobbyName] = useState<string>('')
+    const [lobbyMaxPlayers, setLobbyMaxPlayers] = useState<number>(2)
+
+    const onSubmit = () => {
+        // use a client for the lobby management API to make a lobby.
+        lobbyManagementClient.createLobby(lobbyName, lobbyMaxPlayers);
+    };
+
     return (
         <div>
-            <button>Create Lobby</button>
+            <h1>Create lobby</h1>
+            <p>Lobby name</p>
+            <input value={lobbyName} onChange={(event) => setLobbyName(event.target.value)}/>
+            <p>Lobby max players</p>
+            <input
+                type="number"
+                value={lobbyMaxPlayers}
+                min={1}
+                max={4}
+                onChange={(event) => setLobbyMaxPlayers(parseInt(event.target.value))}
+            />
+            <button onClick={onSubmit}>Create Lobby</button>
         </div>
     )
 }

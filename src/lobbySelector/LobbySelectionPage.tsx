@@ -53,6 +53,9 @@ export default function LobbySelectionPage({
             <Link to="/">
                 <button>Back to title</button>
             </Link>
+            <Link to="/create-lobby">
+                <button>Create lobby</button>
+            </Link>
                 <LobbySelector
                     lobbies={lobbies}
                 />
