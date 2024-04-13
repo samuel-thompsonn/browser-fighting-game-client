@@ -1,5 +1,6 @@
 import { useState } from "react";
 import LobbyManagementClient from "../lobbySelector/LobbyManagementClient";
+import { useNavigate } from "react-router";
 
 interface LobbyCreatorPageProps {
     lobbyManagementClient: LobbyManagementClient
@@ -10,10 +11,14 @@ export default function LobbyCreatorPage({
 }: LobbyCreatorPageProps) {
     const [lobbyName, setLobbyName] = useState<string>('')
     const [lobbyMaxPlayers, setLobbyMaxPlayers] = useState<number>(2)
+    const navigate = useNavigate()
 
     const onSubmit = () => {
         // use a client for the lobby management API to make a lobby.
-        lobbyManagementClient.createLobby(lobbyName, lobbyMaxPlayers);
+        lobbyManagementClient.createLobby(lobbyName, lobbyMaxPlayers)
+            .then(({ lobbyID }) => {
+                navigate(`/lobby/${lobbyID}`);
+            })
     };
 
     return (
