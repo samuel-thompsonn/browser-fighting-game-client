@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@aws-amplify/ui-react": "^6.1.7",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.15.15",
@@ -15,7 +14,7 @@
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.78",
     "@types/react-dom": "^18.2.25",
-    "aws-amplify": "^6.0.26",
+    "aws-amplify": "^6.0.28",
     "eslint-config-airbnb-base": "^15.0.0",
     "install-peerdeps": "^3.0.3",
     "npm-check-updates": "^16.14.18",
