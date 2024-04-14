@@ -1,3 +1,3 @@
 export default interface LobbyActionClient  {
-    startGame: () => Promise<Response>;
+    startGame: (identityID: string) => Promise<Response>;
 }

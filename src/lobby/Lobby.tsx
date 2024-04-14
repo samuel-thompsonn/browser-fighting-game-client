@@ -47,15 +47,16 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
         onOpen: onConnectWebsocket
     });
 
-    function onConnectWebsocket(event: WebSocketEventMap['open']) {
+    async function onConnectWebsocket(event: WebSocketEventMap['open']) {
         console.log(event)
+        console.log('Connected to websocket!')
+        const identityID = (await Auth.currentCredentials()).identityId
         sendJsonMessage({
-            action: "getAllStatuses"
-        })
-        sendJsonMessage({
-            action: "updateStatus",
+            action: "getAllStatuses",
+            identityID,
+            lobbyID,
             status: {
-                ready: ready
+                ready
             }
         })
     }
@@ -129,10 +130,11 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
         });
     }
 
-    function handleStartGame() {
-        lobbyActionClient.startGame().then((response) => {
+    async function handleStartGame() {
+        const identityID = (await Auth.currentCredentials()).identityId
+        lobbyActionClient.startGame(identityID).then((response) => {
             if (!response.ok) {
-                console.log(`Failed to start game: ${response}`)
+                console.log(`Failed to start game: ${JSON.stringify(response)}`)
             }
         });
     }
