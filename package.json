@@ -7,13 +7,13 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/material": "^5.15.15",
+    "@tanstack/react-query": "^5.29.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^15.0.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.96",
     "@types/react": "^17.0.80",
-    "@types/react-dom": "^17.0.25",
     "aws-amplify": "^5.3.18",
     "eslint-config-airbnb-base": "^15.0.0",
     "install-peerdeps": "^3.0.3",
@@ -53,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-dom": "^18.2.25",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.57.0",
