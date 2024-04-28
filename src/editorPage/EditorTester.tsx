@@ -30,10 +30,12 @@ const initSocketConnection = () => {
 
 interface EditorTesterProps {
   characterVisualizer: CharacterVisualizer
+  onChangeGameID?: (gameID: string) => void
 };
 
 const EditorTester = ({
-  characterVisualizer
+  characterVisualizer,
+  onChangeGameID
 }: EditorTesterProps) => {
   const socketConnectiton = useRef<SocketConnection>(initSocketConnection());
 
@@ -64,7 +66,10 @@ const EditorTester = ({
       body: JSON.stringify({ players: [identityID] }),
     });
     const gameID = (await response.json()).gameID;
-    socketConnectiton.current.joinGame(identityID, gameID);
+    socketConnectiton.current.joinGame(identityID, gameID)
+    if (onChangeGameID) {
+      onChangeGameID(gameID)
+    }
   }
 
   return (
