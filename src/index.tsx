@@ -5,7 +5,7 @@ import { Amplify } from 'aws-amplify';
 import awsconfig from './aws-exports';
 
 import Game from './Game';
-import EditorPage from './characterEditor/CharacterEditorPage';
+import EditorPageV1 from './characterEditorV1/CharacterEditorPage';
 import AnimationTesterPage from './animationTester/AnimationTesterPage';
 import TitlePage from './title/TitlePage';
 import LobbySelectionPage from './lobbySelector/LobbySelectionPage';
@@ -15,6 +15,7 @@ import { LobbyPlayground } from './lobby/LobbyPlayground';
 import LobbyActionClientImpl from './lobby/LobbyActionClientImpl';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LobbyCreatorPage from './lobbyCreator/LobbyCreatorPage';
+import EditorPage from './editorPage/EditorPage';
 
 Amplify.configure(awsconfig);
 

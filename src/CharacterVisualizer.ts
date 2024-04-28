@@ -1,4 +1,5 @@
 import animationData from './animation/characterASimpleAnimationsSymmetrical.json';
+import AnimationFileData from './AnimationFileData';
 import DrawableGameCanvas from './DrawableGameCanvas';
 import {
   Position, AnimationState, CollisionRectangle, CharacterStatus, Direction,
@@ -106,8 +107,8 @@ function drawCollisionRectangle(
 class CharacterVisualizer {
   animationStates: Map<string, AnimationState>;
 
-  constructor() {
-    this.animationStates = new SimpleAnimationLoader().loadAnimations(animationData);
+  constructor(inputAnimationData: AnimationFileData = animationData) {
+    this.animationStates = new SimpleAnimationLoader().loadAnimations(inputAnimationData);
   }
 
   drawCharacter(

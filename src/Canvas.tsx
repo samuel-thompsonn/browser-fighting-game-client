@@ -161,9 +161,7 @@ function Canvas({
   });
 
   return (
-    <div>
-      <canvas ref={canvasRef} />
-    </div>
+    <canvas ref={canvasRef} />
   );
 }
 

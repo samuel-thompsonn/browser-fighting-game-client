@@ -1,0 +1,53 @@
+.editor-page {
+    color: white;
+    margin: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.editor-page-interactions {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    justify-content: center;
+}
+
+.editor-canvas-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #505050;
+    padding: 10px;
+    width: 500px;
+    height: 325px;
+}
+
+.editor-tester-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+}
+
+.editor-text-input {
+    background-color: #505050;
+    color: white;
+    padding: 10px;
+    font-family: 'Courier New', Courier, monospace; /* Teletype font */
+    resize: none; /* Prevent resizing of the textarea */
+    border: 1px solid #2b1d08;
+    white-space: pre;
+}
+
+.editor-text-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 400px;
+    overflow: scroll;
+}
+
+.editor-input-section {
+    display: flex;
+    flex-direction: column;
+}
