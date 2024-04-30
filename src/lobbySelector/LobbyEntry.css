@@ -42,6 +42,6 @@ tbody td {
     text-align: center;
 }
 
-p {
+.LobbyEntry > p {
     color: white;
 }

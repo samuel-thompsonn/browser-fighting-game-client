@@ -1,0 +1,38 @@
+.editor-animation-canvas-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #505050;
+  padding: 10px;
+  width: 500px;
+  height: 500px;
+  canvas {
+    width: 98%;
+    aspect-ratio: 1;
+  }
+}
+
+.individual-animation-editor {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+
+.editor-animation-param-controls {
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  gap: 8px;
+}
+
+.animation-parameter-input {
+  p {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+  input {
+    width: 80px;
+  }
+}

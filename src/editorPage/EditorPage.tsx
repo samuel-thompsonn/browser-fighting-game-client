@@ -90,6 +90,8 @@ function EditorPage() {
         <EditorTester
           characterVisualizer={characterVisualizer}
           onChangeGameID={setGameID}
+          characterAnimationData={JSON.parse(characterAnimationData)}
+          onChangeAnimationData={(animationData) => setCharacterAnimationData(JSON.stringify(animationData, null, 2))}
         />
       </div>
     </div>

@@ -2,6 +2,11 @@
     color: white;
     margin: 20px;
     font-family: 'Roboto', sans-serif;
+    h1 {
+        text-align: center;
+        font-size: 2rem;
+        letter-spacing: 1px;
+    }
 }
 
 .editor-page-interactions {
@@ -9,17 +14,6 @@
     flex-direction: row;
     gap: 40px;
     justify-content: center;
-}
-
-.editor-canvas-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: #505050;
-    padding: 10px;
-    width: 500px;
-    height: 325px;
 }
 
 .editor-tester-container {

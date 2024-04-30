@@ -1,0 +1,33 @@
+.editor-tab {
+  margin: 5px auto;
+  padding: 10px 20px;
+  font-family: 'Roboto', sans-serif;
+  color: #dddddd;
+  background-color: #303030;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.editor-tab-selected {
+  background-color: #ffaa00;
+}
+
+.editor-tab:hover {
+  background-color: #404040;
+}
+
+.editor-tab-selected:hover {
+  background-color: #ffaa00;
+}
+
+.editor-tab:active {
+  background-color: #505050; /* slightly modified color when clicked */
+  transition: background-color 0.1s ease;
+}
+
+.editor-tab-selected:active {
+  background-color: #ffaa00; /* slightly modified color when clicked */
+  transition: background-color 0.1s ease;
+}

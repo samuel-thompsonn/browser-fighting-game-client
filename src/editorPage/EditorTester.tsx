@@ -1,24 +1,12 @@
-import { useEffect, useRef } from "react";
-import Canvas from "../Canvas";
+import { useEffect, useRef, useState } from "react";
 import Button from "../component/button/Button";
-import { CharacterStatus, Direction } from "../InterfaceUtils";
 import CharacterVisualizer from "../CharacterVisualizer";
-import { Socket, io } from "socket.io-client";
 import SocketConnection from "./SocketConnection";
-
-function getCharacterStates(): Map<string, CharacterStatus> {
-  const status: CharacterStatus = {
-      id: 'id',
-      position: { x: 0, y: 0 },
-      state: 'idle1',
-      healthInfo: { maxHealth: 100, health: 100 },
-      direction: Direction.LEFT,
-      collisionInfo: [],     
-  }
-  return new Map([
-      ['hello', status]
-  ]);
-}
+import './EditorTester.css';
+import EditorNavigator from "./EditorNavigator/EditorNavigator";
+import EditorGameView from "./EditorGameView/EditorGameView";
+import EditorAnimationView from "./EditorAnimationView/EditorAnimationView";
+import AnimationFileData from "../AnimationFileData";
 
 const initSocketConnection = () => {
   const apiURL = process.env.REACT_APP_API_URL
@@ -30,21 +18,28 @@ const initSocketConnection = () => {
 
 interface EditorTesterProps {
   characterVisualizer: CharacterVisualizer
-  onChangeGameID?: (gameID: string) => void
+  onChangeGameID?: (gameID: string) => void,
+  characterAnimationData: AnimationFileData,
+  onChangeAnimationData?: (animationData: AnimationFileData) => void
 };
 
 const EditorTester = ({
   characterVisualizer,
-  onChangeGameID
+  onChangeGameID,
+  characterAnimationData,
+  onChangeAnimationData,
 }: EditorTesterProps) => {
-  const socketConnectiton = useRef<SocketConnection>(initSocketConnection());
+  const [selectedView, setSelectedView] = useState<string>('Animate');
+  const [canvasScale, setCanvasScale] = useState<number>(1);
+  const [selectedState, setSelectedState] = useState<string>('idle')
+  const socketConnection = useRef<SocketConnection>(initSocketConnection());
 
   const handleKeyPressed = (event: KeyboardEvent) => {
-    socketConnectiton.current.handleKeyPressed(event)
+    socketConnection.current.handleKeyPressed(event)
   }
 
   const handleKeyReleased = (event: KeyboardEvent) => {
-    socketConnectiton.current.handleKeyReleased(event)
+    socketConnection.current.handleKeyReleased(event)
   }
 
   useEffect(() => {
@@ -66,21 +61,55 @@ const EditorTester = ({
       body: JSON.stringify({ players: [identityID] }),
     });
     const gameID = (await response.json()).gameID;
-    socketConnectiton.current.joinGame(identityID, gameID)
+    socketConnection.current.joinGame(identityID, gameID)
     if (onChangeGameID) {
       onChangeGameID(gameID)
+    }
+  }
+  
+  const getView = (view: string) => {
+    switch (view) {
+      case 'Play':
+        return (
+          <EditorGameView
+            characterVisualizer={characterVisualizer}
+            socketConnection={socketConnection.current}
+          />
+        )
+      case 'Animate':
+        return (
+          <EditorAnimationView
+            key="editor-animation-view"
+            animationData={characterAnimationData}
+            onChangeAnimationData={onChangeAnimationData}
+            canvasScale={canvasScale}
+            setCanvasScale={(newCanvasScale) => setCanvasScale(newCanvasScale)}
+            selectedState={selectedState}
+            setSelectedState={(newSelectedState) => setSelectedState(newSelectedState)}
+          />
+        )
+      default:
+        return () => null
     }
   }
 
   return (
     <div className="editor-tester-container">
-      <div className="editor-canvas-container">
-        <Canvas
-          characterVisualizer={characterVisualizer}
-          characters={socketConnectiton.current.getCharacterStates()}
-          gameStartTime={new Date()}
-        />
-      </div>
+      <EditorNavigator
+        options={['Play','Animate']}
+        selected={selectedView}
+        onSetSelected={setSelectedView}
+      />
+      {getView(selectedView)}
+      {/* <EditorAnimationView
+        key="editor-animation-view"
+        animationData={characterAnimationData}
+        onChangeAnimationData={onChangeAnimationData}
+        canvasScale={canvasScale}
+        setCanvasScale={(newCanvasScale) => setCanvasScale(newCanvasScale)}
+        selectedState={selectedState}
+        setSelectedState={(newSelectedState) => setSelectedState(newSelectedState)}
+      /> */}
       <Button onClick={onConnect}>Connect to Server</Button>
     </div>
   )
