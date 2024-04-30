@@ -5,8 +5,8 @@ import AnimationFileData from "../../AnimationFileData";
 import { AnimationDescription } from "../../InterfaceUtils";
 import ParameterInput from "./ParameterInput";
 
-const backgroundImage = new Image();
-backgroundImage.src = "/sprites/ryu_sprite_sheet.png";
+const spriteSheetImage = new Image();
+spriteSheetImage.src = "/sprites/ryu_sprite_sheet.png";
 
 interface EditorAnimationViewProps {
   animationData: AnimationFileData
@@ -26,21 +26,25 @@ const EditorAnimationView = ({
   setSelectedState
 }: EditorAnimationViewProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [userClickLocation, setUserClickLocation] = useState<{ x: number, y: number }>({ x: 0.5, y: 0.5 });
   // const [selectedState, setSelectedState] = useState<string>('idle')
 
   const currentAnimation = animationData.animationStates.filter((state) => state.id === selectedState)[0];
 
+  const canvasDimensions = {
+    width: spriteSheetImage.width * (canvasScale),
+    height: spriteSheetImage.height * (canvasScale)
+  }
   const sourceImageWindow = {
-    x: 0,
-    y: 0,
-    width: backgroundImage.width * (canvasScale),
-    height: backgroundImage.height * (canvasScale)
+    x: currentAnimation.offset.x - (canvasDimensions.width / 2),
+    y: currentAnimation.offset.y- (canvasDimensions.height / 2),
+    ...canvasDimensions,
   }
 
   const drawSpriteBox = (
     drawableCanvas: DrawableGameCanvasImpl,
     animationData: AnimationDescription,
+    imageViewX: number,
+    imageViewY: number,
     imageViewWidth: number,
     imageViewHeight: number,
   ) => {
@@ -50,8 +54,8 @@ const EditorAnimationView = ({
     const numSprites = animationData.numFrames / statesPerFrame;
     for (let i = 0; i < numSprites; i++) {
       drawableCanvas.fillRectangle(
-        (animationData.offset.x / imageViewWidth) + (i * (animationData.stride / imageViewWidth)),
-        animationData.offset.y / imageViewHeight,
+        ((animationData.offset.x + i * (animationData.stride)) - imageViewX) / imageViewWidth,
+        (animationData.offset.y - imageViewY) / imageViewHeight,
         animationData.frameSize.width / imageViewWidth,
         animationData.frameSize.height / imageViewHeight,
       )
@@ -75,9 +79,9 @@ const EditorAnimationView = ({
     drawableCanvas.clear();
 
     drawableCanvas.drawImage(
-      backgroundImage,
-      0,
-      0,
+      spriteSheetImage,
+      sourceImageWindow.x,
+      sourceImageWindow.y,
       sourceImageWindow.width,
       sourceImageWindow.height,
       0,
@@ -89,37 +93,49 @@ const EditorAnimationView = ({
     drawSpriteBox(
       drawableCanvas,
       currentAnimation,
+      sourceImageWindow.x,
+      sourceImageWindow.y,
       sourceImageWindow.width,
       sourceImageWindow.height
     );
     console.log(`Canvas scale: ${canvasScale}`)
-  }, [animationData, canvasScale, currentAnimation, backgroundImage, sourceImageWindow])
+  }, [animationData, canvasScale, currentAnimation, spriteSheetImage, sourceImageWindow])
 
   const handleCanvasClick = (event: React.MouseEvent) => {
     const canvas = event.currentTarget;
     const rect = canvas.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width;
-    const y = (event.clientY - rect.top) / rect.height;
+    const screenX = (event.clientX - rect.left) / rect.width;
+    const screenY = (event.clientY - rect.top) / rect.height;
 
-    console.log('Clicked at:', x, y)
-    setUserClickLocation({ x, y })
+    console.log('[click] Clicked at:', screenX, screenY)
 
-    if (onChangeAnimationData && userClickLocation) {
+    if (onChangeAnimationData) {
       currentAnimation.offset = {
-        x: Math.floor(sourceImageWindow.width * x),
-        y: Math.floor(sourceImageWindow.height * y)
+        x: Math.floor((sourceImageWindow.width * screenX) + sourceImageWindow.x),
+        y: Math.floor((sourceImageWindow.height * screenY) + sourceImageWindow.y)
       }
+      console.log(`[click] currentAnimation.offset = ${JSON.stringify(currentAnimation.offset)}`)
       onChangeAnimationData(animationData)
     }
   }
 
-  // const handleCanvasWheel = (event: React.WheelEvent<HTMLCanvasElement>) => {
-  //   event.preventDefault()
-  //   const newScale = event.deltaY < 0 ? canvasScale * 0.9 : canvasScale / 0.9;
-  //   setCanvasScale(newScale);
-  // };
+  const handleCanvasWheel = (event: React.WheelEvent<HTMLCanvasElement>) => {
+    event.preventDefault()
+    const newScale = event.deltaY < 0 ? canvasScale * 0.9 : canvasScale / 0.9;
+    setCanvasScale(newScale);
+  };
 
   const parameterInputs = [
+    {
+      label: 'Offset x',
+      value: currentAnimation.offset.x,
+      onChange: (newValue: number) => currentAnimation.offset.x = newValue
+    },
+    {
+      label: 'Offset y',
+      value: currentAnimation.offset.y,
+      onChange: (newValue: number) => currentAnimation.offset.y = newValue
+    },
     {
       label: 'Frame width',
       value: currentAnimation.frameSize.width,
@@ -185,6 +201,7 @@ const EditorAnimationView = ({
             <canvas width={1600} height={1600}
               ref={canvasRef}
               onClick={handleCanvasClick}
+              onWheel={handleCanvasWheel}
             />
           </div>
         </div>
