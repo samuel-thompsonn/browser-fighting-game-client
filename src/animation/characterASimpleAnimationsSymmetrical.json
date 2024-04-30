@@ -334,6 +334,63 @@
         "y": -8
       },
       "stride": 0
+    },
+    {
+      "id": "lightKickStartup",
+      "numFrames": 2,
+      "filePath": "ryu_sprite_sheet.png",
+      "offset": {
+        "x": 498,
+        "y": 263
+      },
+      "frameSize": {
+        "width": 47,
+        "height": 83
+      },
+      "stride": 0,
+      "statesPerFrame": 4,
+      "center": {
+        "x": 21,
+        "y": 0
+      }
+    },
+    {
+      "id": "lightKickActive",
+      "numFrames": 2,
+      "filePath": "ryu_sprite_sheet.png",
+      "offset": {
+        "x": 551,
+        "y": 265
+      },
+      "frameSize": {
+        "width": 71,
+        "height": 81
+      },
+      "stride": 0,
+      "statesPerFrame": 4,
+      "center": {
+        "x": 21,
+        "y": 0
+      }
+    },
+    {
+      "id": "lightKickEndLag",
+      "numFrames": 2,
+      "filePath": "ryu_sprite_sheet.png",
+      "offset": {
+        "x": 628,
+        "y": 263
+      },
+      "frameSize": {
+        "width": 47,
+        "height": 83
+      },
+      "stride": 0,
+      "statesPerFrame": 4,
+      "center": {
+        "x": 21,
+        "y": 0
+      }
     }
   ]
 }
