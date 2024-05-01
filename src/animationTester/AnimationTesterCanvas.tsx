@@ -5,14 +5,16 @@ import CharacterVisualizer from "../CharacterVisualizer";
 import { AnimationDescription, Direction } from "../InterfaceUtils";
 
 const VIEWPORT_DIMENSIONS = {
-    aspectRatio: 14/9,
-    gameWidth: 360
+    aspectRatio: 1,
+    gameWidth: 130
 };
 
 const VIEWPORT_OFFSET = {
-  x: -50,
-  y: -110
+  x: -30,
+  y: -10
 };
+
+const CANVAS_WIDTH = 300
 
 interface AnimationTesterCanvasProps {
     characterVisualizer?: CharacterVisualizer;
@@ -72,7 +74,11 @@ function AnimationTesterCanvas({
     return (
         <div>
             {stateId?
-                <canvas ref={canvasRef}/> :
+                <canvas
+                    ref={canvasRef}
+                    width={CANVAS_WIDTH}
+                    height={CANVAS_WIDTH / VIEWPORT_DIMENSIONS.aspectRatio}
+                /> :
                 <p>Select an animation state to view.</p>
             }
         </div>

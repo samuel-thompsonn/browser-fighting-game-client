@@ -3,12 +3,14 @@ import AnimationTesterCanvas from "./AnimationTesterCanvas";
 import './AnimationTester.css'
 import AnimationMultiSelect from "./AnimationMultiSelect";
 import AnimationFileData from "../AnimationFileData";
+import CharacterVisualizer from "../CharacterVisualizer";
 
 interface AnimationTesterProps {
     animationData: AnimationFileData
 }
 
-function AnimationTester({ animationData: { animationStates } }: AnimationTesterProps) {
+function AnimationTester({ animationData }: AnimationTesterProps) {
+    const { animationStates } = animationData
     const [globalFrameIndex, setGlobalFrameIndex] = useState<number>(1);
     const [animationInterval, setAnimationInterval] = useState<NodeJS.Timer>()
     const [animationIndices, setAnimationIndices] = useState<number[]>(getStartingAnimationIndices())
@@ -112,6 +114,7 @@ function AnimationTester({ animationData: { animationStates } }: AnimationTester
                 value={globalFrameIndex} onChange={onChangeSlider}
             />
             <AnimationTesterCanvas
+                characterVisualizer={new CharacterVisualizer(animationData, false)}
                 characterAnimationData={animationStates}
                 stateId={animationSelectionIndex !== undefined? animationStates[animationSelectionIndex].id : undefined}
                 stateFrameIndex={localFrameIndex}

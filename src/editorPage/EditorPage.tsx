@@ -30,6 +30,7 @@ function EditorPage() {
   const [jsonError, setJsonError] = useState<string | undefined>();
   const [characterVisualizer, setCharacterVisualizer] = useState<CharacterVisualizer>(new CharacterVisualizer())
   const [gameID, setGameID] = useState<string | undefined>();
+  const [showSource, setShowSource] = useState(false);
 
   const onSubmit = () => {
     // Transform character animation data into a character locally
@@ -55,38 +56,45 @@ function EditorPage() {
     setCharacterBehaviorData(behaviordata);
   }
 
+  const handleToggleSource = () => {
+    setShowSource(!showSource)
+  }
+
   return (
     <div className="editor-page">
       <h1>Edit Character</h1>
       <div className="editor-page-interactions">
-        <div className="editor-input-section">
-          <div className="editor-text-section">
-            <div>
-              <p>Animation Config</p>
-              <textarea
-                rows={15}
-                cols={50}
-                className="editor-text-input"
-                value={characterAnimationData}
-                onChange={(event) => handleChangeAnimationData(event.target.value)}
-              />
+        <button onClick={handleToggleSource}>Show source</button>
+        {showSource ? (
+          <div className="editor-input-section">
+            <div className="editor-text-section">
+              <div>
+                <p>Animation Config</p>
+                <textarea
+                  rows={15}
+                  cols={50}
+                  className="editor-text-input"
+                  value={characterAnimationData}
+                  onChange={(event) => handleChangeAnimationData(event.target.value)}
+                />
+              </div>
+              <div>
+                <p>Behavior Config</p>
+                <textarea
+                  rows={15}
+                  cols={50}
+                  className="editor-text-input"
+                  value={characterBehaviorData}
+                  onChange={(event) => handleChangeBehaviorData(event.target.value)}
+                />
+              </div>
+              {jsonError ? (
+                <p>{jsonError}</p>
+              ) : null}
             </div>
-            <div>
-              <p>Behavior Config</p>
-              <textarea
-                rows={15}
-                cols={50}
-                className="editor-text-input"
-                value={characterBehaviorData}
-                onChange={(event) => handleChangeBehaviorData(event.target.value)}
-              />
-            </div>
-            {jsonError ? (
-              <p>{jsonError}</p>
-            ) : null}
+            <Button onClick={onSubmit}>Submit</Button>
           </div>
-          <Button onClick={onSubmit}>Submit</Button>
-        </div>
+        ) : null}
         <EditorTester
           characterVisualizer={characterVisualizer}
           onChangeGameID={setGameID}

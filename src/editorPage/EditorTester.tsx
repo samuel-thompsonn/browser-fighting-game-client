@@ -56,7 +56,7 @@ const EditorTester = ({
     const response = await fetch('http://localhost:3001/debug/start-game', {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ players: [identityID] }),
     });
@@ -66,15 +66,18 @@ const EditorTester = ({
       onChangeGameID(gameID)
     }
   }
-  
+
   const getView = (view: string) => {
     switch (view) {
       case 'Play':
         return (
-          <EditorGameView
-            characterVisualizer={characterVisualizer}
-            socketConnection={socketConnection.current}
-          />
+          <div>
+            <EditorGameView
+              characterVisualizer={characterVisualizer}
+              socketConnection={socketConnection.current}
+            />
+            <Button onClick={onConnect}>Connect to Server</Button>
+          </div>
         )
       case 'Animate':
         return (
@@ -96,7 +99,7 @@ const EditorTester = ({
   return (
     <div className="editor-tester-container">
       <EditorNavigator
-        options={['Play','Animate']}
+        options={['Play', 'Animate']}
         selected={selectedView}
         onSetSelected={setSelectedView}
       />
@@ -110,7 +113,6 @@ const EditorTester = ({
         selectedState={selectedState}
         setSelectedState={(newSelectedState) => setSelectedState(newSelectedState)}
       /> */}
-      <Button onClick={onConnect}>Connect to Server</Button>
     </div>
   )
 }

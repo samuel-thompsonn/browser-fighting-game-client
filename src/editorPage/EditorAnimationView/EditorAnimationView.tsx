@@ -4,6 +4,7 @@ import './EditorAnimationView.css'
 import AnimationFileData from "../../AnimationFileData";
 import { AnimationDescription } from "../../InterfaceUtils";
 import ParameterInput from "./ParameterInput";
+import AnimationTester from "../../animationTester/AnimationTester";
 
 const spriteSheetImage = new Image();
 spriteSheetImage.src = "/sprites/ryu_sprite_sheet.png";
@@ -35,7 +36,7 @@ const EditorAnimationView = ({
   }
   const sourceImageWindow = {
     x: currentAnimation.offset.x - (canvasDimensions.width / 2),
-    y: currentAnimation.offset.y- (canvasDimensions.height / 2),
+    y: currentAnimation.offset.y - (canvasDimensions.height / 2),
     ...canvasDimensions,
   }
 
@@ -198,23 +199,30 @@ const EditorAnimationView = ({
             />
           ))}
         </div>
-        <div className="editor-canvas-with-controls">
-          <p>Scale</p>
-          <input
-            type="number"
-            value={canvasScale}
-            min={0.1}
-            max={1}
-            step={0.10}
-            onChange={(event) => setCanvasScale(parseFloat(event.target.value))}
-          />
-          <div className="editor-animation-canvas-container">
-            <canvas width={1600} height={1600}
-              ref={canvasRef}
-              onClick={handleCanvasClick}
-              onWheel={handleCanvasWheel}
-            />
+        <div className="editor-view-windows">
+          <div className="editor-canvas-with-controls">
+            <div className="editor-zoom-control">
+              <p>Zoom</p>
+              <input
+                type="number"
+                value={canvasScale}
+                min={0.1}
+                max={1}
+                step={0.10}
+                onChange={(event) => setCanvasScale(parseFloat(event.target.value))}
+              />
+            </div>
+            <div className="editor-animation-canvas-container">
+              <canvas width={1600} height={1600}
+                ref={canvasRef}
+                onClick={handleCanvasClick}
+                onWheel={handleCanvasWheel}
+              />
+            </div>
           </div>
+          <AnimationTester
+            animationData={animationData}
+          />
         </div>
       </div>
     </div>

@@ -106,9 +106,11 @@ function drawCollisionRectangle(
 
 class CharacterVisualizer {
   animationStates: Map<string, AnimationState>;
+  drawPlayerName: boolean;
 
-  constructor(inputAnimationData: AnimationFileData = animationData) {
+  constructor(inputAnimationData: AnimationFileData = animationData, drawPlayerName = false) {
     this.animationStates = new SimpleAnimationLoader().loadAnimations(inputAnimationData);
+    this.drawPlayerName = drawPlayerName
   }
 
   drawCharacter(
@@ -121,14 +123,16 @@ class CharacterVisualizer {
     }
     const worldWidth = animationState.imageSize.width / SPRITE_PIXELS_PER_UNIT;
     const worldHeight = animationState.imageSize.height / SPRITE_PIXELS_PER_UNIT;
-    canvas.drawText(
-      `ID: ${characterStatus.id}`,
-      characterStatus.position.x,
-      characterStatus.position.y - 10,
-      48,
-      "#2C74B3",
-      "#000000"
-    );
+    if (this.drawPlayerName) {
+      canvas.drawText(
+        `ID: ${characterStatus.id}`,
+        characterStatus.position.x,
+        characterStatus.position.y - 10,
+        48,
+        "#2C74B3",
+        "#000000"
+      );
+    }
     drawCharacterSprite(
       canvas,
       animationState,

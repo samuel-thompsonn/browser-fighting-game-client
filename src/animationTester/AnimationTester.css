@@ -1,4 +1,8 @@
 .Animation-Tester {
-    width: 500px;
-    height: 300px;
+    /* width: 500px;
+    height: 300px; */
+    canvas {
+        width: 130px;
+        height: 130px;
+    }
 }
