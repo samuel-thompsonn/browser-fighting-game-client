@@ -26,9 +26,8 @@ const EditorAnimationView = ({
   setSelectedState
 }: EditorAnimationViewProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  // const [selectedState, setSelectedState] = useState<string>('idle')
-
-  const currentAnimation = animationData.animationStates.filter((state) => state.id === selectedState)[0];
+  const currentAnimation = animationData.animationStates.filter((state) => state.id === selectedState)[0]
+  const [newStateId, setNewStateId] = useState<string>('')
 
   const canvasDimensions = {
     width: spriteSheetImage.width * (canvasScale),
@@ -163,6 +162,16 @@ const EditorAnimationView = ({
     },
   ]
 
+  const handleCreateAnimation = (id: string) => {
+    if (!onChangeAnimationData) { return }
+    animationData.animationStates.push({
+      ...animationData.animationStates[0],
+      id,
+    })
+    onChangeAnimationData(animationData)
+    setSelectedState(id)
+  }
+
   return (
     <div>
       <select
@@ -173,6 +182,8 @@ const EditorAnimationView = ({
           <option value={animationDescription.id}>{animationDescription.id}</option>
         ))}
       </select>
+      <input value={newStateId} onChange={(event) => setNewStateId(event.target.value)}></input>
+      <button onClick={() => handleCreateAnimation(newStateId)}>+</button>
       <div className="individual-animation-editor">
         <div className="editor-animation-param-controls">
           {parameterInputs.map(({ label, value, onChange }) => (
