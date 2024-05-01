@@ -8,9 +8,9 @@ class SocketConnection {
   socket: Socket
   controlsHandler: ControlsHandler
 
-  constructor(apiUrl: string, document: Document) {
+  constructor(apiUrl: string, document: Document, autoConnect = false) {
     this.characterStates = new Map();
-    this.socket = io(apiUrl);
+    this.socket = io(apiUrl, { autoConnect });
     this.initSocketIo(this.socket);
     this.controlsHandler = this.initControlsHandler();
     this.addKeyListeners(document);
@@ -53,12 +53,16 @@ class SocketConnection {
   };
 
   joinGame(identityID: string, gameID: string) {
+    if (!this.socket.connected) {
+      this.socket.connect()
+    }
     this.socket.emit('sendIdentity', { playerID: identityID });
     this.socket.emit('joinGame', { gameID: gameID })
   }
 
   // Private method
   emitControlsChange(controlLabel: string, status: 'pressed' | 'released') {
+    if (!this.socket.connected) { return }
     this.socket.emit('controlsChange', {
       controlsChange: {
         control: controlLabel,
