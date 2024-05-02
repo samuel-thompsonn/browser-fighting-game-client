@@ -391,6 +391,24 @@
         "x": 21,
         "y": 0
       }
+    },
+    {
+      "id": "mediumKick",
+      "numFrames": 12,
+      "offset": {
+        "x": 6,
+        "y": 260
+      },
+      "frameSize": {
+        "width": 49,
+        "height": 86
+      },
+      "stride": 64,
+      "statesPerFrame": 4,
+      "center": {
+        "x": 21,
+        "y": 0
+      }
     }
   ]
 }
