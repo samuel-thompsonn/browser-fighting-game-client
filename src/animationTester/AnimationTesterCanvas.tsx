@@ -3,6 +3,7 @@ import DrawableGameCanvasImpl from "../DrawableGameCanvasImpl";
 import DrawableGameCanvas from "../DrawableGameCanvas";
 import CharacterVisualizer from "../CharacterVisualizer";
 import { AnimationDescription, Direction } from "../InterfaceUtils";
+import { FileCollisionItem } from "../editorPage/BehaviorFileData";
 
 const VIEWPORT_DIMENSIONS = {
     aspectRatio: 1,
@@ -18,13 +19,14 @@ const CANVAS_WIDTH = 300
 
 interface AnimationTesterCanvasProps {
     characterVisualizer?: CharacterVisualizer;
-    characterAnimationData: AnimationDescription[];
+    stateCollisionData?: FileCollisionItem[];
     stateId?: string;
     stateFrameIndex: number;
 }
 
 function AnimationTesterCanvas({
     characterVisualizer = new CharacterVisualizer(),
+    stateCollisionData,
     stateId,
     stateFrameIndex
 }: AnimationTesterCanvasProps) {
@@ -53,7 +55,11 @@ function AnimationTesterCanvas({
                 state: `${stateId}${stateFrameIndex}`,
                 direction: Direction.RIGHT,
                 healthInfo: { health: 0, maxHealth: 0 },
-                collisionInfo: []
+                // collisionInfo: [{
+                //     entityType: 'hurtbox',
+                //     rectangles: [ { x: 0, y: 0, width: 1, height: 1}]
+                // }]
+                collisionInfo: stateCollisionData || [],
             }
             characterVisualizer.drawCharacter(canvas, characterStatus);
         };

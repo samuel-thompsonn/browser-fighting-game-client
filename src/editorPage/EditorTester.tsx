@@ -7,6 +7,7 @@ import EditorNavigator from "./EditorNavigator/EditorNavigator";
 import EditorGameView from "./EditorGameView/EditorGameView";
 import EditorAnimationView from "./EditorAnimationView/EditorAnimationView";
 import AnimationFileData from "../AnimationFileData";
+import { BehaviorFileData } from "./BehaviorFileData";
 
 const initSocketConnection = () => {
   const apiURL = process.env.REACT_APP_API_URL
@@ -21,6 +22,8 @@ interface EditorTesterProps {
   onChangeGameID?: (gameID: string) => void,
   characterAnimationData: AnimationFileData,
   onChangeAnimationData?: (animationData: AnimationFileData) => void
+  characterBehaviorData: BehaviorFileData,
+  onChangeBehaviorData: (behaviorData: BehaviorFileData) => void
 };
 
 const EditorTester = ({
@@ -28,6 +31,8 @@ const EditorTester = ({
   onChangeGameID,
   characterAnimationData,
   onChangeAnimationData,
+  characterBehaviorData,
+  onChangeBehaviorData,
 }: EditorTesterProps) => {
   const [selectedView, setSelectedView] = useState<string>('Animate');
   const [canvasScale, setCanvasScale] = useState<number>(1);
@@ -85,6 +90,8 @@ const EditorTester = ({
             key="editor-animation-view"
             animationData={characterAnimationData}
             onChangeAnimationData={onChangeAnimationData}
+            behaviorData={characterBehaviorData}
+            onChangeBehaviorData={onChangeBehaviorData}
             canvasScale={canvasScale}
             setCanvasScale={(newCanvasScale) => setCanvasScale(newCanvasScale)}
             selectedState={selectedState}
@@ -104,15 +111,6 @@ const EditorTester = ({
         onSetSelected={setSelectedView}
       />
       {getView(selectedView)}
-      {/* <EditorAnimationView
-        key="editor-animation-view"
-        animationData={characterAnimationData}
-        onChangeAnimationData={onChangeAnimationData}
-        canvasScale={canvasScale}
-        setCanvasScale={(newCanvasScale) => setCanvasScale(newCanvasScale)}
-        selectedState={selectedState}
-        setSelectedState={(newSelectedState) => setSelectedState(newSelectedState)}
-      /> */}
     </div>
   )
 }

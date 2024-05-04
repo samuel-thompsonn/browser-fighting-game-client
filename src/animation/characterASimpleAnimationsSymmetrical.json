@@ -409,6 +409,25 @@
         "x": 21,
         "y": 0
       }
+    },
+    {
+      "id": "lightHighKick",
+      "numFrames": 9,
+      "filePath": "ryu_sprite_sheet.png",
+      "offset": {
+        "x": 454,
+        "y": 1085
+      },
+      "frameSize": {
+        "width": 75,
+        "height": 88
+      },
+      "stride": 81,
+      "statesPerFrame": 3,
+      "center": {
+        "x": 38,
+        "y": 4
+      }
     }
   ]
 }

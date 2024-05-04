@@ -5,24 +5,25 @@
   align-items: center;
   background-color: #505050;
   padding: 10px;
-  width: 250px;
+  width: 500px;
   height: 250px;
   canvas {
-    width: 98%;
-    aspect-ratio: 1;
+    width: 480px;
+    height: 240px;
   }
 }
 
 .individual-animation-editor {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 10px;
 }
 
 
 .editor-animation-param-controls {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   padding-top: 10px;
   gap: 8px;
 }

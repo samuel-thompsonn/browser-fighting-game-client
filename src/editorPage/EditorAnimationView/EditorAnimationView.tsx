@@ -5,13 +5,19 @@ import AnimationFileData from "../../AnimationFileData";
 import { AnimationDescription } from "../../InterfaceUtils";
 import ParameterInput from "./ParameterInput";
 import AnimationTester from "../../animationTester/AnimationTester";
+import { BehaviorFileData, FileAttackAnimationDescription } from "../BehaviorFileData";
+import BehaviorStateEditor from "./BehaviorStateEditor";
 
 const spriteSheetImage = new Image();
 spriteSheetImage.src = "/sprites/ryu_sprite_sheet.png";
 
+const CANVAS_ASPECT_RATIO = 2;
+
 interface EditorAnimationViewProps {
   animationData: AnimationFileData
   onChangeAnimationData?: (animationData: AnimationFileData) => void
+  behaviorData: BehaviorFileData
+  onChangeBehaviorData?: (behaviorData: BehaviorFileData) => void
   canvasScale: number
   setCanvasScale: (newCanvasScale: number) => void
   selectedState: string
@@ -21,6 +27,8 @@ interface EditorAnimationViewProps {
 const EditorAnimationView = ({
   animationData,
   onChangeAnimationData,
+  behaviorData,
+  onChangeBehaviorData,
   canvasScale,
   setCanvasScale,
   selectedState,
@@ -28,11 +36,12 @@ const EditorAnimationView = ({
 }: EditorAnimationViewProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const currentAnimation = animationData.animationStates.filter((state) => state.id === selectedState)[0]
+  const currentBehaviorState = behaviorData.animations.find((state) => state.id === selectedState)
   const [newStateId, setNewStateId] = useState<string>('')
 
   const canvasDimensions = {
     width: spriteSheetImage.width * (canvasScale),
-    height: spriteSheetImage.height * (canvasScale)
+    height: spriteSheetImage.height * (canvasScale) / (CANVAS_ASPECT_RATIO)
   }
   const sourceImageWindow = {
     x: currentAnimation.offset.x - (canvasDimensions.width / 2),
@@ -125,7 +134,7 @@ const EditorAnimationView = ({
     setCanvasScale(newScale);
   };
 
-  const parameterInputs = [
+  const animationParameterInputs = [
     {
       label: 'Offset x',
       value: currentAnimation.offset.x,
@@ -164,12 +173,24 @@ const EditorAnimationView = ({
   ]
 
   const handleCreateAnimation = (id: string) => {
-    if (!onChangeAnimationData) { return }
+    if (!onChangeAnimationData || !onChangeBehaviorData) { return }
     animationData.animationStates.push({
-      ...animationData.animationStates[0],
+      ...currentAnimation,
       id,
     })
     onChangeAnimationData(animationData)
+    if (currentBehaviorState) {
+      onChangeBehaviorData({
+        ...behaviorData,
+        animations: [
+          ...behaviorData.animations,
+          {
+            ...currentBehaviorState,
+            id,
+          }
+        ]
+      })
+    }
     setSelectedState(id)
   }
 
@@ -186,19 +207,6 @@ const EditorAnimationView = ({
       <input value={newStateId} onChange={(event) => setNewStateId(event.target.value)}></input>
       <button onClick={() => handleCreateAnimation(newStateId)}>+</button>
       <div className="individual-animation-editor">
-        <div className="editor-animation-param-controls">
-          {parameterInputs.map(({ label, value, onChange }) => (
-            <ParameterInput
-              label={label}
-              value={value}
-              onChange={(newValue: number) => {
-                if (!onChangeAnimationData) { return }
-                onChange(newValue)
-                onChangeAnimationData(animationData)
-              }}
-            />
-          ))}
-        </div>
         <div className="editor-view-windows">
           <div className="editor-canvas-with-controls">
             <div className="editor-zoom-control">
@@ -213,7 +221,7 @@ const EditorAnimationView = ({
               />
             </div>
             <div className="editor-animation-canvas-container">
-              <canvas width={1600} height={1600}
+              <canvas width={3200} height={1600}
                 ref={canvasRef}
                 onClick={handleCanvasClick}
                 onWheel={handleCanvasWheel}
@@ -222,7 +230,41 @@ const EditorAnimationView = ({
           </div>
           <AnimationTester
             animationData={animationData}
+            behaviorData={behaviorData}
           />
+        </div>
+        <div className="editor-animation-param-controls">
+          {animationParameterInputs.map(({ label, value, onChange }) => (
+            <ParameterInput
+              key={label}
+              label={label}
+              value={value}
+              onChange={(newValue: number) => {
+                if (!onChangeAnimationData) { return }
+                onChange(newValue)
+                onChangeAnimationData(animationData)
+              }}
+            />
+          ))}
+          {
+            currentBehaviorState?.type === 'attack' ? (
+              <BehaviorStateEditor
+                behaviorState={currentBehaviorState as FileAttackAnimationDescription}
+                onChangeBehaviorState={(behaviorState) => {
+                  if (!onChangeBehaviorData) { return }
+                  onChangeBehaviorData({
+                    ...behaviorData,
+                    animations: behaviorData.animations.map((state) => {
+                      if (state.id === selectedState) {
+                        return behaviorState
+                      }
+                      return state
+                    })
+                  })
+                }}
+              />
+            ) : null
+          }
         </div>
       </div>
     </div>

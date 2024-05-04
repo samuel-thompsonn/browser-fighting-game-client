@@ -5,6 +5,7 @@ import AnimationFileData from '../AnimationFileData';
 import CharacterVisualizer from '../CharacterVisualizer';
 import EditorTester from './EditorTester';
 import defaultCharacterAnimationData from '../animation/characterASimpleAnimationsSymmetrical.json';
+import defaultCharacterBehaviorData from './sampleData/characterBehaviorData.json'
 
 
 function sendBehaviorData(behaviorData: string, gameID: string): void {
@@ -23,10 +24,12 @@ function sendBehaviorData(behaviorData: string, gameID: string): void {
 }
 
 function EditorPage() {
-  const [characterAnimationData, setCharacterAnimationData] = useState<string>(
+  const [characterAnimationSource, setCharacterAnimationData] = useState<string>(
     JSON.stringify(defaultCharacterAnimationData, null, 2)
   );
-  const [characterBehaviorData, setCharacterBehaviorData] = useState<string>('');
+  const [characterBehaviorSource, setCharacterBehaviorData] = useState<string>(
+    JSON.stringify(defaultCharacterBehaviorData, null, 2)
+  );
   const [jsonError, setJsonError] = useState<string | undefined>();
   const [characterVisualizer, setCharacterVisualizer] = useState<CharacterVisualizer>(new CharacterVisualizer())
   const [gameID, setGameID] = useState<string | undefined>();
@@ -36,14 +39,14 @@ function EditorPage() {
     // Transform character animation data into a character locally
     // do an ugly cast
     try {
-      const inputAnimationData = JSON.parse(characterAnimationData) as AnimationFileData;
+      const inputAnimationData = JSON.parse(characterAnimationSource) as AnimationFileData;
       setCharacterVisualizer(new CharacterVisualizer(inputAnimationData));
     } catch (error) {
       setJsonError((error as Error).message);
     }
     // Send backend character states to the server for it to re-make the character
     if (gameID) {
-      sendBehaviorData(characterBehaviorData, gameID);
+      sendBehaviorData(characterBehaviorSource, gameID);
     }
   }
 
@@ -60,6 +63,17 @@ function EditorPage() {
     setShowSource(!showSource)
   }
 
+  const getSafeParsedData = (source: string) => {
+    try {
+      return JSON.parse(characterAnimationSource)
+    } catch (err) {
+      return undefined
+    }
+  }
+
+  const animationData = getSafeParsedData(characterAnimationSource)
+  const behaviorData = getSafeParsedData(characterBehaviorSource)
+
   return (
     <div className="editor-page">
       <h1>Edit Character</h1>
@@ -74,7 +88,7 @@ function EditorPage() {
                   rows={15}
                   cols={50}
                   className="editor-text-input"
-                  value={characterAnimationData}
+                  value={characterAnimationSource}
                   onChange={(event) => handleChangeAnimationData(event.target.value)}
                 />
               </div>
@@ -84,7 +98,7 @@ function EditorPage() {
                   rows={15}
                   cols={50}
                   className="editor-text-input"
-                  value={characterBehaviorData}
+                  value={characterBehaviorSource}
                   onChange={(event) => handleChangeBehaviorData(event.target.value)}
                 />
               </div>
@@ -95,12 +109,16 @@ function EditorPage() {
             <Button onClick={onSubmit}>Submit</Button>
           </div>
         ) : null}
-        <EditorTester
-          characterVisualizer={characterVisualizer}
-          onChangeGameID={setGameID}
-          characterAnimationData={JSON.parse(characterAnimationData)}
-          onChangeAnimationData={(animationData) => setCharacterAnimationData(JSON.stringify(animationData, null, 2))}
-        />
+        {animationData && behaviorData ? (
+          <EditorTester
+            characterVisualizer={characterVisualizer}
+            onChangeGameID={setGameID}
+            characterAnimationData={JSON.parse(characterAnimationSource)}
+            onChangeAnimationData={(animationData) => setCharacterAnimationData(JSON.stringify(animationData, null, 2))}
+            characterBehaviorData={JSON.parse(characterBehaviorSource)}
+            onChangeBehaviorData={(behaviorData) => setCharacterBehaviorData(JSON.stringify(behaviorData, null, 2))}
+          />
+        ) : null}
       </div>
     </div>
   )

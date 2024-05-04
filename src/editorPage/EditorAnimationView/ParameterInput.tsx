@@ -1,22 +1,25 @@
 interface ParameterInputProps {
   label: string
   value: number
-  onChange: (newValue: number) => void
+  onChange: (newValue: number) => void,
+  step?: number
 }
 
 const ParameterInput = ({
   label,
   value,
-  onChange
+  onChange,
+  step,
 }: ParameterInputProps) => {
   return (
     <div className="animation-parameter-input" key={label}>
       <p>{label}</p>
       <input
         type="number"
+        step={step}
         value={value}
         onChange={(event) => {
-          onChange(parseInt(event.target.value))
+          onChange(parseFloat(event.target.value))
         }}
       />
     </div>
