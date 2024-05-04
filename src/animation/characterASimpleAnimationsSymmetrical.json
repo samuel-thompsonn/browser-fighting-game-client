@@ -63,18 +63,18 @@
     },
     {
       "id": "lightAttack",
-      "numFrames": 2,
+      "numFrames": 6,
       "filePath": "ryu_sprite_sheet.png",
       "offset": {
-        "x": 52,
-        "y": 132
+        "x": 0,
+        "y": 133
       },
       "frameSize": {
-        "width": 61,
+        "width": 49,
         "height": 84
       },
-      "stride": 0,
-      "statesPerFrame": 4,
+      "stride": 55,
+      "statesPerFrame": 2,
       "center": {
         "x": 21,
         "y": 0
