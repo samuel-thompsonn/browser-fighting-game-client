@@ -78,7 +78,9 @@ function EditorPage() {
     <div className="editor-page">
       <h1>Edit Character</h1>
       <div className="editor-page-interactions">
-        <button onClick={handleToggleSource}>Show source</button>
+        <div className="editor-page-left-ribbon">
+          <button onClick={handleToggleSource}>Show source</button>
+        </div>
         {showSource ? (
           <div className="editor-input-section">
             <div className="editor-text-section">
@@ -86,7 +88,7 @@ function EditorPage() {
                 <p>Animation Config</p>
                 <textarea
                   rows={15}
-                  cols={50}
+                  cols={40}
                   className="editor-text-input"
                   value={characterAnimationSource}
                   onChange={(event) => handleChangeAnimationData(event.target.value)}
@@ -96,7 +98,7 @@ function EditorPage() {
                 <p>Behavior Config</p>
                 <textarea
                   rows={15}
-                  cols={50}
+                  cols={40}
                   className="editor-text-input"
                   value={characterBehaviorSource}
                   onChange={(event) => handleChangeBehaviorData(event.target.value)}
