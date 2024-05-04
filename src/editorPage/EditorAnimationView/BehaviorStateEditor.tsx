@@ -1,15 +1,23 @@
 import { CollisionRectangle, FileAttackAnimationDescription, FileCollisionItem } from "../BehaviorFileData"
 import ParameterInput from "./ParameterInput"
+import ParameterStringInput from "./ParameterStringInput"
 
 interface BehaviorStateEditorProps {
   behaviorState: FileAttackAnimationDescription
   onChangeBehaviorState: (animationDescription: FileAttackAnimationDescription) => void
 }
 
+type NumberValueFunction = (behaviorState: FileAttackAnimationDescription) => number
+type StringValueFunction = (behaviorState: FileAttackAnimationDescription) => string
+
+type NumberOnChangeFunction = (draft: FileAttackAnimationDescription, newValue: number) => void
+type StringOnChangeFunction = (draft: FileAttackAnimationDescription, newValue: string) => void
+
 interface ParameterInputModifiedProps {
   label: string
-  value: (behaviorState: FileAttackAnimationDescription) => number
-  onChange: (draft: FileAttackAnimationDescription, newStartupFrames: number) => void
+  type?: 'number' | 'string'
+  value: NumberValueFunction | StringValueFunction
+  onChange: NumberOnChangeFunction | StringOnChangeFunction
   step?: number
 }
 
@@ -32,7 +40,7 @@ const onHurtboxChange = (onChange: (rectangle: CollisionRectangle, newValue: num
       draft.state.collisions.general = [{
         entityType: 'hurtbox',
         rectangles: [
-          { x: 0, y: 0, width: 1, height: 1}
+          { x: 0, y: 0, width: 1, height: 1 }
         ]
       }]
     }
@@ -59,7 +67,7 @@ const onHitboxChange = (onChange: (collisionItem: FileCollisionItem, newValue: n
       draft.state.collisions.active = [{
         entityType: 'hitbox',
         rectangles: [
-          { x: 0, y: 0, width: 1, height: 1}
+          { x: 0, y: 0, width: 1, height: 1 }
         ]
       }]
     }
@@ -95,7 +103,7 @@ const behaviorParameterInputs: ParameterInputModifiedProps[] = [
   {
     label: 'Startup frames',
     value: (behaviorState) => behaviorState.numFrames.startup,
-    onChange: (draft, newStartupFrames) => {
+    onChange: (draft: FileAttackAnimationDescription, newStartupFrames: number) => {
       draft.numFrames.startup = newStartupFrames
     },
   },
@@ -187,6 +195,14 @@ const behaviorParameterInputs: ParameterInputModifiedProps[] = [
     }),
     step: 0.1,
   },
+  {
+    label: 'Destination state',
+    type: 'string',
+    value: (behaviorState) => behaviorState.destinationState,
+    onChange: (draft: FileAttackAnimationDescription, newValue: string) => {
+      draft.destinationState = newValue
+    }
+  }
 ]
 
 const BehaviorStateEditor = ({
@@ -197,19 +213,39 @@ const BehaviorStateEditor = ({
 
   return (
     <div style={{ overflow: 'scroll', height: '150px' }}>
-      {behaviorParameterInputs.map(({ label, value, onChange, step }) => (
-        <ParameterInput
-          key={label}
-          label={label}
-          value={value(behaviorState)}
-          onChange={(newValue) => {
-            const newBehaviorState = { ...behaviorState }
-            onChange(newBehaviorState, newValue)
-            onChangeBehaviorState(newBehaviorState)
-          }}
-          step={step}
-        />
-      ))}
+      {behaviorParameterInputs.map(({ type = 'number', label, value, onChange, step }) => {
+        if (type === 'number') {
+          return (
+            <ParameterInput
+              key={label}
+              label={label}
+              value={value(behaviorState) as number}
+              onChange={(newValue) => {
+                const newBehaviorState = { ...behaviorState }
+                const numberOnChange = onChange as NumberOnChangeFunction
+                numberOnChange(newBehaviorState, newValue)
+                onChangeBehaviorState(newBehaviorState)
+              }}
+              step={step}
+            />
+          )
+        } else {
+          return (
+            <ParameterStringInput
+              key={label}
+              label={label}
+              value={value(behaviorState) as string}
+              onChange={(newValue) => {
+                const newBehaviorState = { ...behaviorState }
+                const stringOnChange = onChange as StringOnChangeFunction
+                stringOnChange(newBehaviorState, newValue)
+                onChangeBehaviorState(newBehaviorState)
+              }}
+            />
+          )
+        }
+
+      })}
     </div>
   )
 }
