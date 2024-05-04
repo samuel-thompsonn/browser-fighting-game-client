@@ -194,8 +194,6 @@ const BehaviorStateEditor = ({
   onChangeBehaviorState,
 }: BehaviorStateEditorProps) => {
   console.log(`Rendering new behaviorState. active frames: ${behaviorState.numFrames.active}`)
-  // TODO: Integrate with behavior data to set these.
-  //   Also, draw the hitboxes!
 
   return (
     <div style={{ overflow: 'scroll', height: '150px' }}>

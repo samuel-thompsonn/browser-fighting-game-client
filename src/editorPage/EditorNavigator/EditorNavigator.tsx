@@ -16,6 +16,7 @@ const EditorNavigator = ({
     <div className='editor-navigation'>
       {options.map((option) => (
         <EditorTab
+          key={option}
           label={option}
           selected={option === selected}
           onSelected={() => onSetSelected(option)}

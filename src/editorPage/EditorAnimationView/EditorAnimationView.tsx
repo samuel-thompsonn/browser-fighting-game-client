@@ -108,7 +108,7 @@ const EditorAnimationView = ({
       sourceImageWindow.height
     );
     console.log(`Canvas scale: ${canvasScale}`)
-  }, [animationData, canvasScale, currentAnimation, spriteSheetImage, sourceImageWindow])
+  }, [animationData, canvasScale, currentAnimation, sourceImageWindow])
 
   const handleCanvasClick = (event: React.MouseEvent) => {
     const canvas = event.currentTarget;
