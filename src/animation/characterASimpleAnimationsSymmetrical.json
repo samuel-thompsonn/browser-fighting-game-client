@@ -428,6 +428,61 @@
         "x": 38,
         "y": 4
       }
+    },
+    {
+      "id": "crouchLightKick",
+      "numFrames": 6,
+      "filePath": "ryu_sprite_sheet.png",
+      "offset": {
+        "x": 465,
+        "y": 1019
+      },
+      "frameSize": {
+        "width": 75,
+        "height": 59
+      },
+      "stride": 77,
+      "statesPerFrame": 2,
+      "center": {
+        "x": 23,
+        "y": -25
+      }
+    },
+    {
+      "id": "jump",
+      "numFrames": 4,
+      "offset": {
+        "x": 539,
+        "y": 16
+      },
+      "frameSize": {
+        "width": 39,
+        "height": 79
+      },
+      "stride": 41,
+      "statesPerFrame": 4,
+      "center": {
+        "x": 21,
+        "y": 0
+      }
+    },
+    {
+      "id": "midair",
+      "numFrames": 4,
+      "offset": {
+        "x": 576,
+        "y": 14
+      },
+      "frameSize": {
+        "width": 39,
+        "height": 76
+      },
+      "stride": 41,
+      "statesPerFrame": 4,
+      "center": {
+        "x": 21,
+        "y": 0
+      }
     }
   ]
 }
