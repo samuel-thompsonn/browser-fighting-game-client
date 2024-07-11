@@ -483,6 +483,43 @@
         "x": 21,
         "y": 0
       }
+    },
+    {
+      "id": "neutralAirKick",
+      "numFrames": 6,
+      "filePath": "ryu_sprite_sheet.png",
+      "offset": {
+        "x": 146,
+        "y": 531
+      },
+      "frameSize": {
+        "width": 48,
+        "height": 84
+      },
+      "stride": 48,
+      "statesPerFrame": 3,
+      "center": {
+        "x": 23,
+        "y": -25
+      }
+    },
+    {
+      "id": "neutralAirLandingLag",
+      "numFrames": 3,
+      "offset": {
+        "x": 846,
+        "y": 418
+      },
+      "frameSize": {
+        "width": 50,
+        "height": 57
+      },
+      "stride": 49,
+      "statesPerFrame": 3,
+      "center": {
+        "x": 21,
+        "y": 0
+      }
     }
   ]
 }
