@@ -520,6 +520,24 @@
         "x": 21,
         "y": 0
       }
+    },
+    {
+      "id": "dodgeInPlace",
+      "numFrames": 6,
+      "offset": {
+        "x": 498,
+        "y": 262
+      },
+      "frameSize": {
+        "width": 48,
+        "height": 86
+      },
+      "stride": 49,
+      "statesPerFrame": 6,
+      "center": {
+        "x": 21,
+        "y": 0
+      }
     }
   ]
 }

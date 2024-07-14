@@ -5,5 +5,6 @@
   "jump": " ",
   "moveDown": "s",
   "lightAttack": "j",
-  "heavyAttack": "k"
+  "heavyAttack": "k",
+  "dodge": "Shift"
 }
