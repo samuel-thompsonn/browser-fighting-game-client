@@ -1,11 +1,32 @@
 # Running the frontend
 
+## Local development (no AWS needed)
+
+The committed `.env.development` enables **mock auth** (`REACT_APP_MOCK_AUTH=true`)
+and points the client at a local game server, so you can just:
+
 ```
-aws sso login
-npm run start
+npm start
 ```
 
-Currently hosted at https://frontend.sam-thompson-test-development.link
+No `aws sso login` / Cognito required. Under mock auth, `Auth.currentCredentials()`
+is never called; the player identity comes from a local mock
+(`src/auth/identity.ts`), defaulting to `local-player`. For local two-player
+testing, give each browser tab its own identity with a query param, e.g.
+`/game/testlobby/Game-0?mockIdentity=PlayerID1` and `...?mockIdentity=PlayerID2`.
+
+You also need a game server on `http://localhost:3001`. From
+`browser-fighting-game-server`, either `npm run start` or `docker compose up --build`.
+For lobby-less play, use the client's debug mode (`?debug`) or open a game route
+directly — see that repo's `doc/manual-verification-sop.md`.
+
+To use **real Cognito** locally instead, create `.env.development.local` with
+`REACT_APP_MOCK_AUTH=false` (and a valid `REACT_APP_API_URL`), then `aws sso login`.
+
+## Production
+
+Built and deployed via AWS Amplify; currently hosted at
+https://frontend.sam-thompson-test-development.link
 
 # Amplify instructions
 

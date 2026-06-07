@@ -1,5 +1,5 @@
 import { WithAuthenticatorProps } from "@aws-amplify/ui-react"
-import { Auth } from "aws-amplify"
+import { getIdentityId, getIdToken } from "../auth/identity"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
 import { useParams, Link, useSearchParams } from "react-router-dom"
@@ -50,7 +50,7 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
     async function onConnectWebsocket(event: WebSocketEventMap['open']) {
         console.log(event)
         console.log('Connected to websocket!')
-        const identityID = (await Auth.currentCredentials()).identityId
+        const identityID = await getIdentityId()
         sendJsonMessage({
             action: "getAllStatuses",
             identityID,
@@ -131,7 +131,7 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
     }
 
     async function handleStartGame() {
-        const identityID = (await Auth.currentCredentials()).identityId
+        const identityID = await getIdentityId()
         lobbyActionClient.startGame(identityID).then((response) => {
             if (!response.ok) {
                 console.log(`Failed to start game: ${JSON.stringify(response)}`)
@@ -144,13 +144,8 @@ function Lobby({ signOut, user, lobbyActionClient }: LobbyProps) {
         // to toggle readiness status as visible to another user.
         // Should use a websocket, since we want to give live updates to each
         // other lobby member.
-        let token
-        try {
-            token = (await Auth.currentSession()).getIdToken()
-        } catch (err) {
-            token = undefined
-        }
-        const identityID = (await Auth.currentCredentials()).identityId
+        const token = await getIdToken()
+        const identityID = await getIdentityId()
         sendJsonMessage({
             action: "updateStatus",
             identityID,

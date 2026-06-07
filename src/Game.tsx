@@ -10,7 +10,7 @@ import "./Game.css";
 import GameEndInfo from './datatype/GameEndInfo';
 import CreatedCharacterMessage from './CreatedCharacterMessage';
 import GameStartInfo from './datatype/GameStartInfo';
-import { Auth } from 'aws-amplify';
+import { getIdentityId } from './auth/identity';
 import { useQuery } from '@tanstack/react-query';
 
 function App() {
@@ -48,7 +48,7 @@ function App() {
   const socket = useRef<Socket>(initSocket());
 
   const sendIdentity = async () => {
-    const identityID = (await Auth.currentCredentials()).identityId
+    const identityID = await getIdentityId()
     socket.current.emit('sendIdentity', { playerID: identityID })
     socket.current.emit('joinGame', { gameID: gameID})
     console.log('Sent sendIdentity and joinGame signals!')
@@ -155,7 +155,7 @@ function App() {
         </>
       ) : null}
       <div className="Header-Container">
-        <h1>Browser fighting game (Game ID: {gameID}, Lobby ID: {lobbyID})</h1>
+        <h1>Browser fighting game</h1>
       </div>
       <div className="Meta-controls-container">
         <button
