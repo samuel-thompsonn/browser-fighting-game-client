@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Browser fighting game client - guest (unauthenticated) Cognito Identity Pool.
+  The app uses Auth.currentCredentials().identityId only as a player identifier;
+  it does not require sign-in. This pool issues anonymous guest identities so the
+  lobby and game flow work without a login. Replaces the deleted Amplify-managed
+  pools that aws-exports.js previously referenced.
+
+Resources:
+  IdentityPool:
+    Type: AWS::Cognito::IdentityPool
+    Properties:
+      IdentityPoolName: browser-fighting-game-guests
+      AllowUnauthenticatedIdentities: true
+
+  # Role assumed by anonymous (guest) identities. The game only needs the
+  # identityId string, so this role grants no service permissions.
+  UnauthenticatedRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: cognito-identity.amazonaws.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                cognito-identity.amazonaws.com:aud: !Ref IdentityPool
+              'ForAnyValue:StringLike':
+                cognito-identity.amazonaws.com:amr: unauthenticated
+
+  RoleAttachment:
+    Type: AWS::Cognito::IdentityPoolRoleAttachment
+    Properties:
+      IdentityPoolId: !Ref IdentityPool
+      Roles:
+        unauthenticated: !GetAtt UnauthenticatedRole.Arn
+
+Outputs:
+  IdentityPoolId:
+    Description: Put this in src/aws-exports.js as aws_cognito_identity_pool_id
+    Value: !Ref IdentityPool

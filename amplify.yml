@@ -1,0 +1,24 @@
+# Frontend-only build for Amplify Hosting.
+#
+# This repo's auth is provisioned out-of-band via deploy/cognito.yaml
+# (a CloudFormation guest Identity Pool), and aws-exports.js is committed and
+# hand-maintained. We intentionally omit the `backend` phase (amplifyPush) so the
+# build does not try to provision the deleted Amplify-managed backend or
+# overwrite aws-exports.js. A repo-level amplify.yml overrides the console build
+# spec.
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm install
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*

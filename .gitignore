@@ -12,7 +12,8 @@ amplify/backend/.temp
 build/
 dist/
 node_modules/
-aws-exports.js
+# aws-exports.js is committed and hand-maintained (guest Identity Pool from
+# deploy/cognito.yaml); the frontend build depends on it being in the repo.
 awsconfiguration.json
 amplifyconfiguration.json
 amplifyconfiguration.dart
