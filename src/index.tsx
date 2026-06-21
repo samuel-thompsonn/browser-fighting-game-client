@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Amplify } from 'aws-amplify';
-import awsconfig from './aws-exports';
+import awsconfig from './amplifyConfig';
 
 import Game from './Game';
 import EditorPageV1 from './characterEditorV1/CharacterEditorPage';
